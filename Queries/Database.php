@@ -10,18 +10,27 @@ class Database
     private static $instance;
     private $connection;
 
-    private function __construct()
-    {
-        $host = $_ENV["HOST"] ?? null;
-        $dbname = $_ENV["DBNAME"] ?? null;
-        $user = $_ENV["USER"] ?? null;
-        $password = $_ENV["PASSWORD"] ?? null;
+    private $host;
+    private $dbname;
+    private $user;
+    private $password;
 
-        try {
+
+    private function __construct($host, $dbname, $user, $password)
+    {
+        $this->user;
+        $this->host;
+        $this->dbname;
+        $this->password;
+
+        try 
+        {
             // Votre code d'initialisation de la connexion à la base de données ici
-            $this->connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
+            $this->connection = new PDO("mysql:host=$this->host;dbname=$this->dbname;charset=utf8", $this->user, $this->password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
+            echo "Connected successfully";
+        } catch (PDOException $e) 
+        {
             // Gérer les erreurs de connexion ici
             die('Erreur : ' . $e->getMessage());
         }
@@ -29,7 +38,8 @@ class Database
 
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
+        if (!isset(self::$instance)) 
+        {
             self::$instance = new self();
         }
         return self::$instance;
@@ -40,3 +50,4 @@ class Database
         return $this->connection;
     }
 }
+

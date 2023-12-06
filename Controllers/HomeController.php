@@ -3,51 +3,35 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Queries\Database;
 use App\Model\User;
-use PDO;
+use App\Model\Companies;
+
+
 
 class HomeController extends Controller
 {
 
-    /*
-    * return view
-    */
-    public function index()
+    public function users()
     {
-        $users = $this->getUsers();
-
-        // Passez les données à la vue
-        return $this->view('welcome', ["name" => "Cogip"]);
+        $userModel = new User();
+        $userModel->getAllUsers();
     }
 
-    private function getUsers()
+    public function fiveUsers()
     {
-        // Utilisez la classe Database pour obtenir une connexion
-        $database = Database::getInstance();
-        $connection = $database->getConnection();
+        $userModel = new User();
+        $userModel->getFirstFive();
+    }
 
-        // Exemple de requête pour récupérer des données
-        $query = $connection->prepare("SELECT * FROM users");
-        $query->execute();
-        $usersData = $query->fetchAll(PDO::FETCH_ASSOC);
+    public function AllCompanies()
+    {
+        $companiesModel = new Companies();
+        $companiesModel->getAllCompanies();
+    }
 
-        // Récupérez les résultats sous forme d'objets User
-        $users = [];
-        foreach ($usersData as $userData) {
-            $users[] = new User(
-                $userData['id'],
-                $userData['first_name'],
-                $userData['role_id'],
-                $userData['last_name'],
-                $userData['email'],
-                $userData['password'],
-                $userData['created_at'],
-                $userData['updated_at']
-            );
-        }
-
-        var_dump($users);
-        return $this->view('welcome', ["name" => "Cogip", "users" => $users]);
+    public function fiveCompanies()
+    {
+        $companiesModel = new Companies();
+        $companiesModel->firstFiveCompanies();
     }
 }

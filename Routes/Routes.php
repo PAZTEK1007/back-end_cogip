@@ -7,8 +7,20 @@ use App\Controllers\HomeController;
 
 $router = new Router();
 
-$router->get('/', function () {
-    (new HomeController)->index();
+$router->get('/api/users', function () {
+    (new HomeController)->users();
+});
+
+$router->get('/api/fiveusers', function () {
+    (new HomeController)->fiveUsers();
+});
+
+$router->get('/api/companies', function () {
+    (new HomeController)->AllCompanies();
+});
+
+$router->get('/api/fivecompanies', function () {
+    (new HomeController)->fiveCompanies();
 });
 
 $router->run();

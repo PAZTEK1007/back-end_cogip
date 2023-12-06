@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,12 +17,7 @@
             <img src="public/assets/img/Illustration.png" alt="cogip logo" class="illustration">
             <h1>Welcome to <?php echo $name ?></h1>
             <p>This base project is provided by BeCode</p>
-            <!-- Ajouter une boucle pour afficher les noms de tous les utilisateurs -->
-            <ul>
-                <?php foreach ($users as $user) : ?>
-                    <li><?php echo $user->first_name; ?></li>
-                <?php endforeach; ?>
-            </ul>
+
             <ul>
                 <li><a href="https://github.com/bramus/router" target="_blank">Bramus/Router</a></li>
                 <li><a href="https://github.com/filp/whoops" target="_blank">Flip/Whoops</a></li>
@@ -33,4 +28,4 @@
     </main>
 </body>
 
-</html>
+</html> -->

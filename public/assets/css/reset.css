@@ -3,7 +3,7 @@
    License: none (public domain)
 */
 
-html,
+/* html,
 body,
 div,
 span,
@@ -93,7 +93,7 @@ video {
 }
 
 /* HTML5 display-role reset for older browsers */
-article,
+/* article,
 aside,
 details,
 figcaption,
@@ -132,4 +132,4 @@ q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
-}
+} */

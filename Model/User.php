@@ -2,70 +2,67 @@
 
 namespace App\Model;
 
+use App\Queries\Database;
+use PDO;
+
 class User
 {
-    public int $id;
-    public string $first_name;
-    public int $role_id;
-    public string $last_name;
-    public string $email;
-    public string $password;
-    public string $created_at;
-    public string $updated_at;
 
-    public function __construct(int $id, string $first_name, int $role_id, string $last_name, string $email, string $password, string $created_at, string $updated_at)
+    ////////GET ALL USERS//////////////////////////////////////////////////////////////////////////////////////////////
+    public function getAllUsers()
     {
-        $this->id = $id;
-        $this->first_name = $first_name;
-        $this->role_id = $role_id;
-        $this->last_name = $last_name;
-        $this->email = $email;
-        $this->password = $password;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
+        // Utilisez la classe Database pour obtenir une connexion
+        $database = Database::getInstance();
+        $connection = $database->getConnection();
+
+        //requête pour récupérer tous les users
+        $query = $connection->prepare(
+            "SELECT roles.name AS role_name, users.first_name, users.last_name, users.email, users.password
+            FROM roles
+            JOIN users ON roles.id = users.role_id
+            JOIN roles_permission ON roles.id = roles_permission.role_id
+            JOIN permissions ON roles_permission.permission_id = permissions.id"
+        );
+
+        $query->execute();
+        $usersData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Convertir en JSON
+        // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
+        $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
+
+        // Définir les en-têtes pour indiquer que la réponse est au format JSON
+        header('Content-Type: application/json');
+        echo $jsonData;
     }
-}
 
 
-class Roles
-{
-    public int $id;
-    public string $name;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $name, string $created_at, string $updated_at)
+    //////GET FIRST FIVE USERS/////////////////////////////////////////////////////////////////////////////////////////
+
+    //requête pour récupérer les 5premiers users
+    public function getFirstFive()
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
-    }
-}
+        // Utilisez la classe Database pour obtenir une connexion
+        $database = Database::getInstance();
+        $connection = $database->getConnection();
+        $query = $connection->prepare(
+            "SELECT roles.name AS role_name, users.first_name, users.last_name, users.email, users.password
+                    FROM roles
+                    JOIN users ON roles.id = users.role_id
+                    JOIN roles_permission ON roles.id = roles_permission.role_id
+                    JOIN permissions ON roles_permission.permission_id = permissions.id
+                    LIMIT 5 OFFSET 0"
+        );
 
+        $query->execute();
+        $usersData = $query->fetchAll(PDO::FETCH_ASSOC);
 
-class Roles_permissions
-{
-    public int $id;
-    public int $permission_id;
-    public int $role_id;
-    public function __construct(int $id, int $permission_id, int $role_id)
-    {
-        $this->id = $id;
-        $this->permission_id = $permission_id;
-        $this->role_id = $role_id;
-    }
-}
+        // Convertir en JSON
+        // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
+        $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
-
-class Permissions
-{
-    public int $id;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $created_at, string $updated_at)
-    {
-        $this->id = $id;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
+        // Définir les en-têtes pour indiquer que la réponse est au format JSON
+        header('Content-Type: application/json');
+        echo $jsonData;
     }
 }

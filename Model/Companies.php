@@ -2,79 +2,62 @@
 
 namespace App\Model;
 
+use App\Queries\Database;
+use PDO;
 
 class Companies
 {
-    public int $id;
-    public string $name;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $name, string $created_at, string $updated_at)
+    public function getAllCompanies()
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
+        // Utilisez la classe Database pour obtenir une connexion
+        $database = Database::getInstance();
+        $connection = $database->getConnection();
+        $query = $connection->prepare(
+            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, contacts.name, contacts.email, contacts.phone, invoices.ref
+        FROM types 
+        JOIN companies ON types.id = companies.type_id
+        JOIN contacts ON companies.id = contacts.company_id
+        JOIN invoices ON companies.id = invoices.id_company"
+        );
+        $query->execute();
+        $companiesData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+        // Convertir en JSON
+        //JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
+        $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
+
+        // Définir les en-têtes pour indiquer que la réponse est au format JSON
+        header('Content-Type: application/json');
+        echo $jsonData;
     }
-}
 
-class Types
-{
-    public int $id;
-    public string $name;
-    public int $type_id;
-    public string $country;
-    public string $tva;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $name, int $type_id, string $country, string $tva, string $created_at, string $updated_at)
+
+
+    //GET FIRST FIVE COMPANIES
+    public function firstFiveCompanies()
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->type_id = $type_id;
-        $this->country = $country;
-        $this->tva = $tva;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
-    }
-}
+        // Utilisez la classe Database pour obtenir une connexion
+        $database = Database::getInstance();
+        $connection = $database->getConnection();
+        $query = $connection->prepare(
+            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, contacts.name, contacts.email, contacts.phone, invoices.ref
+         FROM types 
+         JOIN companies ON types.id = companies.type_id
+         JOIN contacts ON companies.id = contacts.company_id
+         JOIN invoices ON companies.id = invoices.id_company
+         LIMIT 5 OFFSET 0"
+        );
+        $query->execute();
+        $companiesData = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
-class Invoices
-{
-    public int $id;
-    public string $ref;
-    public int $id_company;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $ref, int $id_company, string $created_at, string $updated_at)
-    {
-        $this->id = $id;
-        $this->ref = $ref;
-        $this->id_company = $id_company;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
-    }
-}
+        // Convertir en JSON
+        //JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
+        $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
-
-class Contacts
-{
-    public int $id;
-    public string $name;
-    public int $company_id;
-    public string $email;
-    public string $phone;
-    public string $created_at;
-    public string $updated_at;
-    public function __construct(int $id, string $name, int $company_id, string $email, string $phone, string $created_at, string $updated_at)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->company_id = $company_id;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->created_at = $created_at;
-        $this->updated_at = $updated_at;
+        // Définir les en-têtes pour indiquer que la réponse est au format JSON
+        header('Content-Type: application/json');
+        echo $jsonData;
     }
 }

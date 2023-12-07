@@ -13,7 +13,7 @@ class Companies
         $database = Database::getInstance();
         $connection = $database->getConnection();
         $query = $connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, contacts.name, contacts.email, contacts.phone, invoices.ref
+            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name, contacts.email, contacts.phone, contacts.created_at AS user_creation, invoices.ref, invoices.created_at AS invoice_creation
         FROM types 
         JOIN companies ON types.id = companies.type_id
         JOIN contacts ON companies.id = contacts.company_id
@@ -41,7 +41,7 @@ class Companies
         $database = Database::getInstance();
         $connection = $database->getConnection();
         $query = $connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, contacts.name, contacts.email, contacts.phone, invoices.ref
+            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name, contacts.email, contacts.phone, contacts.created_at AS user_creation, invoices.ref, invoices.created_at AS invoice_creation
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id

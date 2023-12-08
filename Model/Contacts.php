@@ -87,4 +87,17 @@ class Contacts extends BaseModel
             throw $e;
         }
     }
+
+    //vérifier si le contact existe déjà et récupérer son ID si c'est le cas
+    public function getContactIdByName($contactName)
+    {
+        $query = $this->connection->prepare("SELECT id FROM contacts WHERE name= :contactName");
+        $query->bindParam(':contactName', $contactName);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID du contact si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
+    }
 }

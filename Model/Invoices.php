@@ -91,4 +91,17 @@ class Invoices extends BaseModel
             throw $e;
         }
     }
+
+    //vérifier si l'invoice existe déjà et récupérer son ID si c'est le cas
+    public function getInvoiceIdByName($ref)
+    {
+        $query = $this->connection->prepare("SELECT id FROM invoices WHERE ref = :ref");
+        $query->bindParam(':ref', $ref);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID de l'invoice si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
+    }
 }

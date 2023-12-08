@@ -108,6 +108,16 @@ class HomeController extends Controller
             $country = $data['country'];
             $tva = $data['tva'];
             $companyCreated_at = $data['company_creation'];
+
+            //vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //si la company existe déjà -> message d'erreur
+            if (!empty($companyId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La company existe deja."]);
+                return;
+            }
+
             // Créer l'entreprise en utilisant le modèle Companies
             $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
         } catch (Exception $e) {
@@ -134,13 +144,23 @@ class HomeController extends Controller
 
             //vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //vérifier si ref existe déjà ans la db
+            $contactId = $this->contactsModel->getContactIdByName($contactName);
 
             //si l'entreprise n'existe pas ->message d'erreur
             if (!$companyId) {
                 http_response_code(400);
-                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez créer l'entreprise avant d'ajouter un contact."]);
+                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter un contact."]);
                 return;
             }
+
+            //si le name existe déjà -> message d'erreur
+            if (!empty($contactId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "Le contact existe deja."]);
+                return;
+            }
+
 
             //ajouter l'id de la company à company_id de contact
             $contactData['company_id'] = $companyId;
@@ -169,11 +189,19 @@ class HomeController extends Controller
 
             // Vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //vérifier si ref existe déjà ans la db
+            $invoiceId = $this->invoicesModel->getInvoiceIdByName($ref);
 
             // Si l'entreprise n'existe pas -> message d'erreur
             if (!$companyId) {
                 http_response_code(400);
-                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez créer l'entreprise avant d'ajouter une facture."]);
+                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter une facture."]);
+                return;
+            }
+            //si la ref existe déjà -> message d'erreur
+            if (!empty($invoiceId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La facture existe deja."]);
                 return;
             }
 
@@ -189,7 +217,5 @@ class HomeController extends Controller
 
 
 
-//vérifier si le contact existe sinon erreur 404
-//verifier si l'invoice existe sinon erreur 404
-//vérifier si la company existe sinon erreur 404
+//vérifier si la company existe erreur 404
 //vérifier si tous les champs sont remplis sinon erreur 500 + précision

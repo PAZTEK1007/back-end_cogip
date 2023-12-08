@@ -54,8 +54,18 @@ $router->get('/api/contacts/(\d+)', function ($id) {
 });
 
 // POST METHOD  ////////////////////////////////////////////////////////////////
-// CONTACT  /////////////////////////////////
+// COMPANY  /////////////////////////////////
+$router->post('/api/add-company', function () {
+    (new HomeController)->createNewCompany();
+});
+
+// CONTACT /////////////////////////////////////////
 $router->post('/api/add-contact', function () {
-    (new HomeController)->createContactWithCompany();
+    (new HomeController)->createNewContact();
+});
+
+// INVOICE ////////////////////////////////////////////
+$router->post('/api/add-invoice', function () {
+    (new HomeController)->createNewInvoice();
 });
 $router->run();

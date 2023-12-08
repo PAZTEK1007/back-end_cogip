@@ -72,7 +72,7 @@ class Companies extends BaseModel
     }
 
     // POST NEW COMPANY  ////////////////////////////////////////////////////////////////
-    public function createCompany($companyName, $type_id, $country, $tva, $created_at)
+    public function createCompany($companyName, $type_id, $country, $tva, $companyCreated_at)
     {
         try {
             // Insérer dans la table Companies
@@ -82,15 +82,24 @@ class Companies extends BaseModel
             $query->bindParam(':type_id', $type_id);
             $query->bindParam(':country', $country);
             $query->bindParam(':tva', $tva);
-            $query->bindParam(':created_at', $created_at);
-            $query->bindParam(':updated_at', $created_at);
-            $query->execute();
-
-            $companyId = $this->connection->lastInsertId(); // Retourne l'ID généré
-
-            return $companyId;
+            $query->bindParam(':created_at', $companyCreated_at);
+            $query->bindParam(':updated_at', $companyCreated_at);
+            return $query->execute();
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    //vérifier si la company existe déjà et récupérer son ID si c'est le cas
+    public function getCompanyIdByName($companyName)
+    {
+        $query = $this->connection->prepare("SELECT id FROM companies WHERE name = :companyName");
+        $query->bindParam(':companyName', $companyName);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID de l'entreprise si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
     }
 }

@@ -95,46 +95,127 @@ class HomeController extends Controller
 
     // POST COMPANY   ///////////////////////////////////////
 
-
-
-    // POST INVOICE //////////////////////////////////////////////////
-
-
-
-    // POST CONTACT  //////////////////////////////////////////////
-    // dans le form il ya  les données de contacts mais le name de company du coup appel à 2 méthode 1 pour créer une company et une autre pour créer un contact
-    // on lie les deux via l'id 
-    public function createContactWithCompany()
+    public function createNewCompany()
     {
         try {
             // Récupérer le corps de la requête JSON
             $jsonBody = file_get_contents("php://input");
+            // Transformer le JSON en un tableau PHP associatif
+            $data = json_decode($jsonBody, true);
 
+            $companyName = $data['company_name'];
+            $type_id = $data['type_id'];
+            $country = $data['country'];
+            $tva = $data['tva'];
+            $companyCreated_at = $data['company_creation'];
+
+            //vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //si la company existe déjà -> message d'erreur
+            if (!empty($companyId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La company existe deja."]);
+                return;
+            }
+
+            // Créer l'entreprise en utilisant le modèle Companies
+            $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // POST CONTACT  //////////////////////////////////////////////
+    public function createNewContact()
+    {
+
+        try {
+            // Récupérer le corps de la requête JSON
+            $jsonBody = file_get_contents("php://input");
             // Transformer le JSON en un tableau PHP associatif
             $data = json_decode($jsonBody, true);
 
             // Extraire les données nécessaires du tableau associatif
-            $contactName = $data['contactName'];
-            $company_id = $data['company_id'];
+            $contactName = $data['name'];
             $email = $data['email'];
             $phone = $data['phone'];
-            $nameCreated_at = $data['nameCreated_at'];
-            $companyName = $data['companyName'];
-            $type_id = $data['type_id'];
-            $country = $data['country'];
-            $tva = $data['tva'];
-            $created_at = $data['created_at'];
+            $contactCreated_at = $data['contact_creation'];
+            $companyName = $data['company_name'];
 
-            // Créer l'entreprise en utilisant le modèle Companies
-            $companyId = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $created_at);
+            //vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //vérifier si ref existe déjà ans la db
+            $contactId = $this->contactsModel->getContactIdByName($contactName);
 
-            // Ajouter l'ID de l'entreprise aux données du contact
+            //si l'entreprise n'existe pas ->message d'erreur
+            if (!$companyId) {
+                http_response_code(400);
+                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter un contact."]);
+                return;
+            }
+
+            //si le name existe déjà -> message d'erreur
+            if (!empty($contactId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "Le contact existe deja."]);
+                return;
+            }
+
+
+            //ajouter l'id de la company à company_id de contact
             $contactData['company_id'] = $companyId;
 
-            // Créer le contact en utilisant le modèle Contacts
-            $this->contactsModel->createContact($contactName, $company_id, $email, $phone, $nameCreated_at);
+            //créer le contact
+            $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+
+    // POST INVOICE //////////////////////////////////////////////////
+
+    public function createNewInvoice()
+    {
+        try {
+            // Récupérer le corps de la requête JSON
+            $jsonBody = file_get_contents("php://input");
+            // Transformer le JSON en un tableau PHP associatif
+            $data = json_decode($jsonBody, true);
+
+            $ref = $data['ref'];
+            $invoiceCreated_at = $data['invoice_creation'];
+            $companyName = $data['company_name'];
+
+            // Vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //vérifier si ref existe déjà ans la db
+            $invoiceId = $this->invoicesModel->getInvoiceIdByName($ref);
+
+            // Si l'entreprise n'existe pas -> message d'erreur
+            if (!$companyId) {
+                http_response_code(400);
+                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter une facture."]);
+                return;
+            }
+            //si la ref existe déjà -> message d'erreur
+            if (!empty($invoiceId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La facture existe deja."]);
+                return;
+            }
+
+            // Ajouter l'id de la company à company_id de invoices
+            $invoiceData['id_company'] = $companyId;
+
+            $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
         } catch (Exception $e) {
             throw $e;
         }
     }
 }
+
+
+
+//vérifier si la company existe erreur 404
+//vérifier si tous les champs sont remplis sinon erreur 500 + précision

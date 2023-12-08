@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Model\BaseModel;
 use PDO;
+use Exception;
 
 class Invoices extends BaseModel
 {
@@ -71,5 +72,36 @@ class Invoices extends BaseModel
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         header('Content-Type: application/json');
         echo json_encode($companiesid, JSON_PRETTY_PRINT);
+    }
+
+    // POST METHOD /////////////////////////////////////////////////////////////////////////////////
+    public function createInvoice($ref, $id_company, $invoiceCreated_at)
+    {
+        try {
+            $query = $this->connection->prepare(
+                "INSERT INTO invoices (ref, id_company, created_at, updated_at) VALUES (:ref, :id_company, :created_at, :updated_at)"
+            );
+
+            $query->bindParam(':ref', $ref);
+            $query->bindParam(':id_company', $id_company);
+            $query->bindParam(':created_at', $invoiceCreated_at);
+            $query->bindParam(':updated_at', $invoiceCreated_at);
+            return $query->execute();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    //vérifier si l'invoice existe déjà et récupérer son ID si c'est le cas
+    public function getInvoiceIdByName($ref)
+    {
+        $query = $this->connection->prepare("SELECT id FROM invoices WHERE ref = :ref");
+        $query->bindParam(':ref', $ref);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID de l'invoice si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
     }
 }

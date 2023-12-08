@@ -69,7 +69,7 @@ class Contacts extends BaseModel
     }
 
     // POST METHOD  //////////////////////////////////////////////////////////////////////////////////////////////
-    public function createContact($contactName, $company_id, $email, $phone, $nameCreated_at)
+    public function createContact($contactName, $company_id, $email, $phone, $contactCreated_at)
     {
         try {
             $query = $this->connection->prepare(
@@ -80,11 +80,24 @@ class Contacts extends BaseModel
             $query->bindParam(':company_id', $company_id);
             $query->bindParam(':email', $email);
             $query->bindParam(':phone', $phone);
-            $query->bindParam(':created_at', $nameCreated_at);
-            $query->bindParam(':updated_at', $nameCreated_at);
+            $query->bindParam(':created_at', $contactCreated_at);
+            $query->bindParam(':updated_at', $contactCreated_at);
             return $query->execute();
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    //vérifier si le contact existe déjà et récupérer son ID si c'est le cas
+    public function getContactIdByName($contactName)
+    {
+        $query = $this->connection->prepare("SELECT id FROM contacts WHERE name= :contactName");
+        $query->bindParam(':contactName', $contactName);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID du contact si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
     }
 }

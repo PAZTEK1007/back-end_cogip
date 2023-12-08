@@ -69,7 +69,7 @@ class Contacts extends BaseModel
     }
 
     // POST METHOD  //////////////////////////////////////////////////////////////////////////////////////////////
-    public function createContact($contactName, $company_id, $email, $phone, $nameCreated_at)
+    public function createContact($contactName, $company_id, $email, $phone, $contactCreated_at)
     {
         try {
             $query = $this->connection->prepare(
@@ -80,8 +80,8 @@ class Contacts extends BaseModel
             $query->bindParam(':company_id', $company_id);
             $query->bindParam(':email', $email);
             $query->bindParam(':phone', $phone);
-            $query->bindParam(':created_at', $nameCreated_at);
-            $query->bindParam(':updated_at', $nameCreated_at);
+            $query->bindParam(':created_at', $contactCreated_at);
+            $query->bindParam(':updated_at', $contactCreated_at);
             return $query->execute();
         } catch (Exception $e) {
             throw $e;

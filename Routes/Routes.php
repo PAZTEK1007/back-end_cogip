@@ -7,6 +7,12 @@ use App\Controllers\HomeController;
 
 $router = new Router();
 
+$router->before('GET|POST|PUT|DELETE', '/.', function () {
+    // Autoriser les requêtes depuis n'importe quelle origine
+    header("Access-Control-Allow-Origin:");
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+});
+
 // GET METHOD  //////////////////////////////////////////////////////
 // USERS /////////////////////////////////////////////////////////////////
 $router->get('/api/users', function () {

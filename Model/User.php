@@ -2,21 +2,19 @@
 
 namespace App\Model;
 
-use App\Queries\Database;
+use App\Model\BaseModel;
 use PDO;
 
-class User
+class User extends BaseModel
 {
 
     ////////GET ALL USERS//////////////////////////////////////////////////////////////////////////////////////////////
     public function getAllUsers()
     {
-        // Utilisez la classe Database pour obtenir une connexion
-        $database = Database::getInstance();
-        $connection = $database->getConnection();
+
 
         //requête pour récupérer tous les users
-        $query = $connection->prepare(
+        $query = $this->connection->prepare(
             "SELECT roles.name AS role_name, users.first_name, users.last_name, users.email, users.password
             FROM roles
             JOIN users ON roles.id = users.role_id
@@ -39,13 +37,9 @@ class User
 
     //////GET FIRST FIVE USERS/////////////////////////////////////////////////////////////////////////////////////////
 
-    //requête pour récupérer les 5premiers users
-    public function getFirstFive()
+    public function getFirstFiveUsers()
     {
-        // Utilisez la classe Database pour obtenir une connexion
-        $database = Database::getInstance();
-        $connection = $database->getConnection();
-        $query = $connection->prepare(
+        $query = $this->connection->prepare(
             "SELECT roles.name AS role_name, users.first_name, users.last_name, users.email, users.password
                     FROM roles
                     JOIN users ON roles.id = users.role_id
@@ -64,5 +58,25 @@ class User
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         header('Content-Type: application/json');
         echo $jsonData;
+    }
+
+
+    // GET USER BY ID  ////////////////////////////////////////////////////////////////////////////////////////////
+    public function show($id)
+    {
+        $query = $this->connection->prepare(
+            "SELECT roles.name AS role_name, users.first_name, users.last_name, users.email, users.password
+                    FROM roles
+                    JOIN users ON roles.id = users.role_id
+                    JOIN roles_permission ON roles.id = roles_permission.role_id
+                    JOIN permissions ON roles_permission.permission_id = permissions.id
+                    WHERE users.id = :id"
+        );
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+        // Définir les en-têtes pour indiquer que la réponse est au format JSON
+        header('Content-Type: application/json');
+        echo json_encode($companiesid, JSON_PRETTY_PRINT);
     }
 }

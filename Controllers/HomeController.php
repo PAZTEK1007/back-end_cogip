@@ -7,6 +7,7 @@ use App\Model\User;
 use App\Model\Companies;
 use App\Model\Invoices;
 use App\Model\Contacts;
+use App\Model\Types;
 use Exception;
 
 
@@ -17,6 +18,7 @@ class HomeController extends Controller
     private $companiesModel;
     private $invoicesModel;
     private $contactsModel;
+    private $typesModel;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class HomeController extends Controller
         $this->companiesModel = new Companies;
         $this->invoicesModel = new Invoices;
         $this->contactsModel = new Contacts;
+        $this->typesModel = new Types;
     }
 
     //  GET USERS   ////////////////////////////////////////////////////////
@@ -103,23 +106,29 @@ class HomeController extends Controller
             // Transformer le JSON en un tableau PHP associatif
             $data = json_decode($jsonBody, true);
 
+            $typeName = $data['type_name'];
             $companyName = $data['company_name'];
             $type_id = $data['type_id'];
             $country = $data['country'];
             $tva = $data['tva'];
             $companyCreated_at = $data['company_creation'];
 
+            //vérifier si le type_name existe dans la db
+            $typeId = $this->typesModel->getTypeIdByName($typeName);
             //vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+
             //si la company existe déjà -> message d'erreur
             if (!empty($companyId)) {
                 http_response_code(400);
                 echo json_encode(["message" => "La company existe deja."]);
                 return;
             }
+            // Ajouter l'id de type à type_id de companies
+            $companyData['type_id'] = $typeId;
 
             // Créer l'entreprise en utilisant le modèle Companies
-            $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
+            $this->companiesModel->createCompany($typeId, $companyName, $type_id, $country, $tva, $companyCreated_at);
         } catch (Exception $e) {
             throw $e;
         }

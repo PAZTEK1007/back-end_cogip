@@ -19,7 +19,7 @@ class Database
 
         try {
             // Votre code d'initialisation de la connexion à la base de données ici
-            $this->connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
+            $this->connection = new PDO("mysql://$user:$password@$host/$dbname;charset=utf8", $user, $password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             // Gérer les erreurs de connexion ici

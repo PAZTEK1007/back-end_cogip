@@ -8,17 +8,9 @@ use App\Controllers\HomeController;
 
 $router = new Router();
 
-
-// Middleware pour les en-têtes CORS
-function setCorsHeaders()
-{
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type');
-}
-
-// Appliquer les en-têtes CORS pour toutes les routes
-setCorsHeaders();
+// header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Methods: GET, POST');
+// header('Access-Control-Allow-Headers: Content-Type');
 
 
 $router->mount('/api', function () use ($router) {

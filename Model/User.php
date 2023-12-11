@@ -33,19 +33,19 @@ class User extends BaseModel
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        // echo new JsonResponse(
-        //     $jsonData,
-        //     empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-        //     [
-        //         'content-type' => 'application/json',
-        //         'status' => 'success',
-        //         'Access-Control-Allow-Origin' => '*',
-        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-        //         'Access-Control-Allow-Credentials' => 'true'
+        echo new JsonResponse(
+            $jsonData,
+            empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'true'
 
-        //     ],
-        //     true
-        // );
+            ],
+            true
+        );
     }
 
 
@@ -71,19 +71,19 @@ class User extends BaseModel
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        // echo new JsonResponse(
-        //     $jsonData,
-        //     empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-        //     [
-        //         'content-type' => 'application/json',
-        //         'status' => 'success',
-        //         'Access-Control-Allow-Origin' => '*',
-        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-        //         'Access-Control-Allow-Credentials' => 'true'
+        echo new JsonResponse(
+            $jsonData,
+            empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'true'
 
-        //     ],
-        //     true
-        // );
+            ],
+            true
+        );
     }
 
 
@@ -106,18 +106,18 @@ class User extends BaseModel
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        // echo new JsonResponse(
-        //     $jsonData,
-        //     empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-        //     [
-        //         'content-type' => 'application/json',
-        //         'status' => 'success',
-        //         'Access-Control-Allow-Origin' => '*',
-        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-        //         'Access-Control-Allow-Credentials' => 'false'
+        echo new JsonResponse(
+            $jsonData,
+            empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'false'
 
-        //     ],
-        //     true
-        // );
+            ],
+            true
+        );
     }
 }

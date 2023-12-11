@@ -4,73 +4,50 @@ namespace App\Routes;
 
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
+use App\Core\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 $router = new Router();
-$router->before('GET|POST|PUT|DELETE', '/.', function () {
-    // Autoriser les requêtes depuis n'importe quelle origine
-    header("Access-Control-Allow-Origin:");
-    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+
+$router->mount('/api', function () use ($router) {
+    // GET METHOD  //////////////////////////////////////////////////////
+    // USERS /////////////////////////////////////////////////////////////////
+    $router->get('/users', function () {
+        $user = new HomeController();
+        $response = $user->allUsers();
+        Controller::sendJsonResponse($response);
+    });
+
+    $router->get('/fiveusers', 'HomeController@fiveUsers');
+    $router->get('/users/(\d+)', 'HomeController@showUser');
+
+    // COMPANIES /////////////////////////////////////////////////////////////////
+    $router->get('/companies', 'HomeController@allCompanies');
+    $router->get('/fivecompanies', 'HomeController@fiveCompanies');
+    $router->get('/companies/(\d+)', 'HomeController@showCompany');
+
+    // INVOICES /////////////////////////////////////////////////////////////////
+    $router->get('/invoices', 'HomeController@allInvoices');
+    $router->get('/fiveinvoices', 'HomeController@fiveInvoices');
+    $router->get('/invoices/(\d+)', 'HomeController@showInvoice');
+
+    // CONTACTS /////////////////////////////////////////////////////////////////
+    $router->get('/contacts', 'HomeController@allContacts');
+    $router->get('/fivecontacts', 'HomeController@fiveContacts');
+    $router->get('/contacts/(\d+)', 'HomeController@showContact');
+
+    // POST METHOD  ////////////////////////////////////////////////////////////////
+    // COMPANY  /////////////////////////////////
+    $router->post('/add-company', 'HomeController@createNewCompany');
+
+    // CONTACT /////////////////////////////////////////
+    $router->post('/add-contact', 'HomeController@createNewContact');
+
+    // INVOICE ////////////////////////////////////////////
+    $router->post('/add-invoice', 'HomeController@createNewInvoice');
 });
 
-// GET METHOD  //////////////////////////////////////////////////////
-// USERS /////////////////////////////////////////////////////////////////
-$router->get('/api/users', function () {
-    (new HomeController)->allUsers();
-});
-$router->get('/api/fiveusers', function () {
-    (new HomeController)->fiveUsers();
-});
-$router->get('/api/users/(\d+)', function ($id) {
-    (new HomeController)->showUser($id);
-});
-
-
-// COMPANIES /////////////////////////////////////////////////////////////////
-$router->get('/api/companies', function () {
-    (new HomeController)->allCompanies();
-});
-$router->get('/api/fivecompanies', function () {
-    (new HomeController)->fiveCompanies();
-});
-$router->get('/api/companies/(\d+)', function ($id) {
-    (new HomeController)->showCompany($id);
-});
-
-// INVOICES /////////////////////////////////////////////////////////////////
-$router->get('/api/invoices', function () {
-    (new HomeController)->allInvoices();
-});
-$router->get('/api/fiveinvoices', function () {
-    (new HomeController)->fiveInvoices();
-});
-$router->get('/api/invoices/(\d+)', function ($id) {
-    (new HomeController)->showInvoice($id);
-});
-
-// CONTACTS /////////////////////////////////////////////////////////////////
-$router->get('/api/contacts', function () {
-    (new HomeController)->allContacts();
-});
-$router->get('/api/fivecontacts', function () {
-    (new HomeController)->fiveContacts();
-});
-$router->get('/api/contacts/(\d+)', function ($id) {
-    (new HomeController)->showContact($id);
-});
-
-// POST METHOD  ////////////////////////////////////////////////////////////////
-// COMPANY  /////////////////////////////////
-$router->post('/api/add-company', function () {
-    (new HomeController)->createNewCompany();
-});
-
-// CONTACT /////////////////////////////////////////
-$router->post('/api/add-contact', function () {
-    (new HomeController)->createNewContact();
-});
-
-// INVOICE ////////////////////////////////////////////
-$router->post('/api/add-invoice', function () {
-    (new HomeController)->createNewInvoice();
-});
 $router->run();

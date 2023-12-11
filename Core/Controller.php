@@ -13,4 +13,17 @@ return view*/
         extract($data);
         require_once(__ROOT__ . '/Ressources/views/' . $view . '.php');
     }
+    public function sendJsonResponse($response)
+    {
+        echo $response;
+
+        $statusCode = $response instanceof JsonResponse ? $response->getStatusCode() : Response::HTTP_OK;
+        http_response_code($statusCode);
+
+        foreach ($response->headers->all() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+    }
 }

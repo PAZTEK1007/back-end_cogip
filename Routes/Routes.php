@@ -6,9 +6,10 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 
 $router = new Router();
+// Middleware pour gérer les en-têtes CORS
 $router->before('GET|POST|PUT|DELETE', '/.', function () {
     // Autoriser les requêtes depuis n'importe quelle origine
-    header("Access-Control-Allow-Origin:");
+    header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 });
 

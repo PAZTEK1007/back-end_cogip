@@ -28,19 +28,19 @@ class Invoices extends BaseModel
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success',
-                // 'Access-Control-Allow-Origin' => '*',
-                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                // 'Access-Control-Allow-Credentials' => 'false'
+        // echo new JsonResponse(
+        //     $jsonData,
+        //     empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+        //     [
+        //         'content-type' => 'application/json',
+        //         'status' => 'success',
+        //         'Access-Control-Allow-Origin' => '*',
+        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+        //         'Access-Control-Allow-Credentials' => 'false'
 
-            ],
-            true
-        );
+        //     ],
+        //     true
+        // );
     }
 
 
@@ -64,19 +64,19 @@ class Invoices extends BaseModel
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success',
-                // 'Access-Control-Allow-Origin' => '*',
-                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                // 'Access-Control-Allow-Credentials' => 'false'
+        // echo new JsonResponse(
+        //     $jsonData,
+        //     empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+        //     [
+        //         'content-type' => 'application/json',
+        //         'status' => 'success',
+        //         'Access-Control-Allow-Origin' => '*',
+        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+        //         'Access-Control-Allow-Credentials' => 'false'
 
-            ],
-            true
-        );
+        //     ],
+        //     true
+        // );
     }
 
 
@@ -97,19 +97,19 @@ class Invoices extends BaseModel
         // Convertir en JSON 
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $companiesData,
-            empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success',
-                // 'Access-Control-Allow-Origin' => '*',
-                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                // 'Access-Control-Allow-Credentials' => 'false'
+        // echo new JsonResponse(
+        //     $companiesData,
+        //     empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+        //     [
+        //         'content-type' => 'application/json',
+        //         'status' => 'success',
+        //         'Access-Control-Allow-Origin' => '*',
+        //         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+        //         'Access-Control-Allow-Credentials' => 'false'
 
-            ],
-            true
-        );
+        //     ],
+        //     true
+        // );
     }
 
     // POST METHOD /////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,9 @@
 namespace App\Model;
 
 use App\Model\BaseModel;
+use App\Model\Error;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use PDO;
 
 class User extends BaseModel
@@ -11,7 +14,6 @@ class User extends BaseModel
     ////////GET ALL USERS//////////////////////////////////////////////////////////////////////////////////////////////
     public function getAllUsers()
     {
-
 
         //requête pour récupérer tous les users
         $query = $this->connection->prepare(
@@ -27,13 +29,19 @@ class User extends BaseModel
 
         // Convertir en JSON
         // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
-        $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
+
+        $jsonData = json_encode($usersData,JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        header('Content-Type: application/json');
-        echo $jsonData;
+        echo new JsonResponse(
+            $jsonData,
+            empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            ['content-type' => 'application/json','status' => 'success'],
+            true
+        );
     }
 
+    
 
     //////GET FIRST FIVE USERS/////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,8 +64,12 @@ class User extends BaseModel
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        header('Content-Type: application/json');
-        echo $jsonData;
+        echo new JsonResponse(
+            $jsonData,
+            empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            ['content-type' => 'application/json','status' => 'success'],
+            true
+        );
     }
 
 
@@ -75,8 +87,17 @@ class User extends BaseModel
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Convertir en JSON
+        $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
+
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        header('Content-Type: application/json');
-        echo json_encode($companiesid, JSON_PRETTY_PRINT);
+        echo new JsonResponse(
+            $jsonData,
+            empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            ['content-type' => 'application/json','status' => 'success'],
+            true
+        );
     }
+
 }

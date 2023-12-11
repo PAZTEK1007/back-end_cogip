@@ -36,7 +36,7 @@ class User extends BaseModel
         echo new JsonResponse(
             $jsonData,
             empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success'],
+            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
             true
         );
     }
@@ -67,7 +67,7 @@ class User extends BaseModel
         echo new JsonResponse(
             $jsonData,
             empty($usersData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success'],
+            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
             true
         );
     }
@@ -95,7 +95,7 @@ class User extends BaseModel
         echo new JsonResponse(
             $jsonData,
             empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success'],
+            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
             true
         );
     }

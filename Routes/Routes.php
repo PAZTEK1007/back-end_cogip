@@ -14,40 +14,67 @@ $router = new Router();
 
 $router->mount('/api', function () use ($router) {
     // GET METHOD  //////////////////////////////////////////////////////
+
     // USERS /////////////////////////////////////////////////////////////////
     $router->get('/users', function () {
-        $user = new HomeController();
-        $response = $user->allUsers();
-        Controller::sendJsonResponse($response);
+        (new HomeController())->allUsers();
+    });
+    $router->get('/fiveusers', function() {
+        (new HomeController())->fiveUsers();
+    });
+    $router->get('/users/(\d+)', function ($id) {
+        (new HomeController())->showUser($id);
     });
 
-    $router->get('/fiveusers', 'HomeController@fiveUsers');
-    $router->get('/users/(\d+)', 'HomeController@showUser');
-
     // COMPANIES /////////////////////////////////////////////////////////////////
-    $router->get('/companies', 'HomeController@allCompanies');
-    $router->get('/fivecompanies', 'HomeController@fiveCompanies');
-    $router->get('/companies/(\d+)', 'HomeController@showCompany');
+    $router->get('/companies', function () {
+        (new HomeController())->allCompanies();
+    });
+    $router->get('/fivecompanies', function() {
+        (new HomeController())->fiveCompanies();
+    });
+    $router->get('/companies/(\d+)', function ($id) {
+        (new HomeController())->showCompany($id);
+    });
 
     // INVOICES /////////////////////////////////////////////////////////////////
-    $router->get('/invoices', 'HomeController@allInvoices');
-    $router->get('/fiveinvoices', 'HomeController@fiveInvoices');
-    $router->get('/invoices/(\d+)', 'HomeController@showInvoice');
+    $router->get('/invoices', function () {
+        (new HomeController())->allInvoices();
+    });
+    $router->get('/fiveinvoices', function() {
+        (new HomeController())->fiveInvoices();
+    });
+    $router->get('/invoices/(\d+)', function ($id) {
+        (new HomeController())->showInvoice($id);
+    });
 
     // CONTACTS /////////////////////////////////////////////////////////////////
-    $router->get('/contacts', 'HomeController@allContacts');
-    $router->get('/fivecontacts', 'HomeController@fiveContacts');
-    $router->get('/contacts/(\d+)', 'HomeController@showContact');
+    $router->get('/contacts', function () {
+        (new HomeController())->allContacts();
+    });
+    $router->get('/fivecontacts', function() {
+        (new HomeController())->fiveContacts();
+    });
+    $router->get('/contacts/(\d+)', function ($id) {
+        (new HomeController())->showContact($id);
+    });
 
     // POST METHOD  ////////////////////////////////////////////////////////////////
+
     // COMPANY  /////////////////////////////////
-    $router->post('/add-company', 'HomeController@createNewCompany');
+    $router->post('/add-company', function (Request $request) {
+        (new HomeController())->createNewCompany($request);
+    });
 
     // CONTACT /////////////////////////////////////////
-    $router->post('/add-contact', 'HomeController@createNewContact');
+    $router->post('/add-contact', function (Request $request) {
+        (new HomeController())->createNewContact($request);
+    });
 
     // INVOICE ////////////////////////////////////////////
-    $router->post('/add-invoice', 'HomeController@createNewInvoice');
+    $router->post('/add-invoice', function (Request $request) {
+        (new HomeController())->createNewInvoice($request);
+    });
 });
 
 $router->run();

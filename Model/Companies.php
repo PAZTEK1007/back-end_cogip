@@ -36,8 +36,8 @@ class Companies extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -62,7 +62,7 @@ class Companies extends BaseModel
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
-       echo new JsonResponse(
+        echo new JsonResponse(
             $jsonData,
             empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
             [
@@ -70,8 +70,8 @@ class Companies extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -101,8 +101,8 @@ class Companies extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );

@@ -36,8 +36,8 @@ class Contacts extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -68,8 +68,8 @@ class Contacts extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -87,7 +87,7 @@ class Contacts extends BaseModel
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
         echo new JsonResponse(
             $companiesData,
@@ -97,8 +97,8 @@ class Contacts extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );

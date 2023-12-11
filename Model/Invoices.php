@@ -36,8 +36,8 @@ class Invoices extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -72,8 +72,8 @@ class Invoices extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
@@ -93,7 +93,7 @@ class Invoices extends BaseModel
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
-    
+
         // Convertir en JSON 
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
@@ -105,8 +105,8 @@ class Invoices extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );

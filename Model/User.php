@@ -30,7 +30,7 @@ class User extends BaseModel
         // Convertir en JSON
         // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
 
-        $jsonData = json_encode($usersData,JSON_PRETTY_PRINT);
+        $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         echo new JsonResponse(
@@ -42,13 +42,13 @@ class User extends BaseModel
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Credentials' => 'true'
-                
+
             ],
             true
         );
     }
 
-    
+
 
     //////GET FIRST FIVE USERS/////////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ class User extends BaseModel
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Credentials' => 'true'
-                
+
             ],
             true
         );
@@ -101,7 +101,7 @@ class User extends BaseModel
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Convertir en JSON
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
@@ -114,11 +114,10 @@ class User extends BaseModel
                 'status' => 'success',
                 'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
-                
+                'Access-Control-Allow-Credentials' => 'false'
+
             ],
             true
         );
     }
-
 }

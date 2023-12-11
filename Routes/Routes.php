@@ -64,18 +64,18 @@ $router->mount('/api', function () use ($router) {
     // POST METHOD  ////////////////////////////////////////////////////////////////
 
     // COMPANY  /////////////////////////////////
-    $router->post('/add-company', function (Request $request) {
-        (new HomeController())->createNewCompany($request);
+    $router->post('/add-company', function () {
+        (new HomeController())->createNewCompany();
     });
 
     // CONTACT /////////////////////////////////////////
-    $router->post('/add-contact', function (Request $request) {
-        (new HomeController())->createNewContact($request);
+    $router->post('/add-contact', function () {
+        (new HomeController())->createNewContact();
     });
 
     // INVOICE ////////////////////////////////////////////
-    $router->post('/add-invoice', function (Request $request) {
-        (new HomeController())->createNewInvoice($request);
+    $router->post('/add-invoice', function () {
+        (new HomeController())->createNewInvoice();
     });
 });
 

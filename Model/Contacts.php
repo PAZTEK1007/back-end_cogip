@@ -34,9 +34,9 @@ class Contacts extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'false'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'false'
 
             ],
             true
@@ -66,9 +66,9 @@ class Contacts extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'false'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'false'
 
             ],
             true
@@ -95,9 +95,9 @@ class Contacts extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'false'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'false'
 
             ],
             true

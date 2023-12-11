@@ -39,9 +39,9 @@ class User extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'true'
 
             ],
             true
@@ -77,9 +77,9 @@ class User extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'true'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'true'
 
             ],
             true
@@ -112,9 +112,9 @@ class User extends BaseModel
             [
                 'content-type' => 'application/json',
                 'status' => 'success',
-                'Access-Control-Allow-Origin' => '*',
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Credentials' => 'false'
+                // 'Access-Control-Allow-Origin' => '*',
+                // 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                // 'Access-Control-Allow-Credentials' => 'false'
 
             ],
             true

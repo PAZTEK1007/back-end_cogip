@@ -31,7 +31,14 @@ class Companies extends BaseModel
         echo new JsonResponse(
             $jsonData,
             empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'true'
+                
+            ],
             true
         );
     }
@@ -58,7 +65,14 @@ class Companies extends BaseModel
        echo new JsonResponse(
             $jsonData,
             empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'true'
+                
+            ],
             true
         );
     }
@@ -82,7 +96,14 @@ class Companies extends BaseModel
         echo new JsonResponse(
             $companiesData,
             empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
-            ['content-type' => 'application/json','status' => 'success', 'Access-Control-Allow-Origin' => '*'],
+            [
+                'content-type' => 'application/json',
+                'status' => 'success',
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials' => 'true'
+                
+            ],
             true
         );
     }

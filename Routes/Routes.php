@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 $router = new Router();
 
+
+
 $router->mount('/api', function () use ($router) {
     // GET METHOD  //////////////////////////////////////////////////////
 
@@ -19,7 +21,7 @@ $router->mount('/api', function () use ($router) {
     $router->get('/users', function () {
         (new HomeController())->allUsers();
     });
-    $router->get('/fiveusers', function() {
+    $router->get('/fiveusers', function () {
         (new HomeController())->fiveUsers();
     });
     $router->get('/users/(\d+)', function ($id) {
@@ -30,7 +32,7 @@ $router->mount('/api', function () use ($router) {
     $router->get('/companies', function () {
         (new HomeController())->allCompanies();
     });
-    $router->get('/fivecompanies', function() {
+    $router->get('/fivecompanies', function () {
         (new HomeController())->fiveCompanies();
     });
     $router->get('/companies/(\d+)', function ($id) {
@@ -41,7 +43,7 @@ $router->mount('/api', function () use ($router) {
     $router->get('/invoices', function () {
         (new HomeController())->allInvoices();
     });
-    $router->get('/fiveinvoices', function() {
+    $router->get('/fiveinvoices', function () {
         (new HomeController())->fiveInvoices();
     });
     $router->get('/invoices/(\d+)', function ($id) {
@@ -52,7 +54,7 @@ $router->mount('/api', function () use ($router) {
     $router->get('/contacts', function () {
         (new HomeController())->allContacts();
     });
-    $router->get('/fivecontacts', function() {
+    $router->get('/fivecontacts', function () {
         (new HomeController())->fiveContacts();
     });
     $router->get('/contacts/(\d+)', function ($id) {

@@ -115,7 +115,8 @@ class HomeController extends Controller
             $typeId = $this->typesModel->getTypeIdByName($typeName);
             //vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
-
+            error_log("Avant de récupérer l'id de la company");
+            error_log("Company ID: " . $companyId);
             //si la company existe déjà -> message d'erreur
             if (!empty($companyId)) {
                 http_response_code(400);
@@ -137,7 +138,9 @@ class HomeController extends Controller
             header('Content-Type: application/json');
 
             echo json_encode($response, JSON_PRETTY_PRINT);
+            error_log("Après la création du contact avec succès");
         } catch (Exception $e) {
+            error_log("Erreur lors de la création du contact : " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
         }

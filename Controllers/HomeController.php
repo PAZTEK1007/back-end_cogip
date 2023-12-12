@@ -42,7 +42,7 @@ class HomeController extends Controller
     {
         $this->userModel->show($id);
     }
-
+    // DELETE USER   ////////////////////////////////////////////////////////
     public function delUser($id)
     {
         $this->userModel->delete($id);

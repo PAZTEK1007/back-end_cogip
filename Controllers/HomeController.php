@@ -134,9 +134,8 @@ class HomeController extends Controller
             return new JsonResponse($company, 200, ["message" => "La company a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($company, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
         }
-        
     }
 
     // POST CONTACT  //////////////////////////////////////////////
@@ -185,7 +184,7 @@ class HomeController extends Controller
             return new JsonResponse($contact, 200, ["message" => "Le contact a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($contact, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
         }
     }
 
@@ -230,7 +229,7 @@ class HomeController extends Controller
             return new JsonResponse($invoice, 200, ["message" => "L'invoice a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($invoice, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
         }
     }
 }

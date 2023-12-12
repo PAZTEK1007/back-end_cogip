@@ -134,7 +134,7 @@ class HomeController extends Controller
             return new JsonResponse($company, 200, ["message" => "La company a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
+            return new JsonResponse(null, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
         }
     }
 
@@ -184,7 +184,7 @@ class HomeController extends Controller
             return new JsonResponse($contact, 200, ["message" => "Le contact a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
+            return new JsonResponse(null, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
         }
     }
 
@@ -225,16 +225,18 @@ class HomeController extends Controller
             $invoiceData['id_company'] = $companyId;
 
             $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
+            echo json_encode($invoice);
             // Créer l'entreprise en utilisant le modèle Invoices
             return new JsonResponse($invoice, 200, ["message" => "L'invoice a été créée avec succès."], true);
         } catch (Exception $e) {
+            error_log(json_encode(["error" => $e->getMessage()]));
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
+            return new JsonResponse(null, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
         }
     }
 }
 
 
 
-//vérifier si la company existe erreur 404
+
 //vérifier si tous les champs sont remplis sinon erreur 500 + précision

@@ -63,7 +63,11 @@ class HomeController extends Controller
     {
         $this->companiesModel->show($id);
     }
-
+    // DELETE COMPANY   ////////////////////////////////////////////////////////
+    public function delCompany($id)
+    {
+        $this->companiesModel->delete($id);
+    }
 
     //  GET INVOICES  ////////////////////////////////
 
@@ -81,6 +85,12 @@ class HomeController extends Controller
         $this->invoicesModel->show($id);
     }
 
+    // DELETE INVOICE   ////////////////////////////////////////////////////////
+    public function delInvoice($id)
+    {
+        $this->invoicesModel->delete($id);
+    }
+
     // GET CONTACTS   ///////////////////////////////////////////////
     public function allContacts()
     {
@@ -96,7 +106,11 @@ class HomeController extends Controller
     {
         $this->contactsModel->show($id);
     }
-
+    // DELETE CONTACT   ////////////////////////////////////////////////////////
+    public function delContact($id)
+    {
+        $this->contactsModel->delete($id);
+    }
 
     // POST COMPANY   ///////////////////////////////////////
 

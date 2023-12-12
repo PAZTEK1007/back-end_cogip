@@ -81,8 +81,22 @@ $router->mount('/api', function () use ($router) {
     });
 
     // DELETE METHOD  ////////////////////////////////////////////////////////////////
+
+    // USER /////////////////////////////////////////////////////////////////////
     $router->delete('/del-user/(\d+)', function ($id) {
         (new HomeController())->delUser($id);
+    });
+    // COMPANY /////////////////////////////////////////////////////////////////
+    $router->delete('/del-company/(\d+)', function ($id) {
+        (new HomeController())->delCompany($id);
+    });
+    // INVOICE /////////////////////////////////////////////////////////////////
+    $router->delete('/del-invoice/(\d+)', function ($id) {
+        (new HomeController())->delInvoice($id);
+    });
+    // CONTACT /////////////////////////////////////////////////////////////////
+    $router->delete('/del-contact/(\d+)', function ($id) {
+        (new HomeController())->delContact($id);
     });
 });
 

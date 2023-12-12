@@ -180,4 +180,44 @@ class Invoices extends BaseModel
         //retourner l'ID de l'invoice si une correspondance sinon retourner null
         return $result ? $result['id'] : null;
     }
+    // DELETE INVOICE BY ID ////////////////////////////////////////////////////////////////////////////////////////////
+    public function delete($id){
+        $query = $this->connection->prepare(
+            "DELETE FROM invoices WHERE id = :id"
+        );
+    
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Convertir en JSON
+        $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
+
+        if (empty($companiesid)) 
+        {
+            $statusCode = 500;
+            $status = 'error';
+        } 
+        else 
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of invoices by id',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesid,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
+    }
 }

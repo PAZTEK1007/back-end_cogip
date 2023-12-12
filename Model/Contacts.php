@@ -175,4 +175,45 @@ class Contacts extends BaseModel
         //retourner l'ID du contact si une correspondance sinon retourner null
         return $result ? $result['id'] : null;
     }
+    // DELETE CONTACT BY ID //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function delete($id)
+    {
+        $query = $this->connection->prepare(
+            "DELETE FROM contacts WHERE id = :id"
+        );
+
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
+
+        if (empty($companiesid)) 
+        {
+            $statusCode = 500;
+            $status = 'error';
+        } 
+        else 
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of contacts by id',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesid,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
+    }
 }

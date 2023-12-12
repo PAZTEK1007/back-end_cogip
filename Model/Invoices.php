@@ -220,4 +220,38 @@ class Invoices extends BaseModel
     
         echo $jsonData;
     }
+    public function updateInvoice($id)
+    {
+        try {
+            // Récupérer le corps de la requête JSON
+            $body = file_get_contents('php://input');
+            $data = json_decode($body);
+
+            // Vérifier si le type existe déjà
+            $invoiceId = $this->getInvoiceIdByName($data->ref);
+
+            // Si le type existe déjà, retourner une erreur
+            if ($invoiceId) {
+                http_response_code(400);
+                echo json_encode(['message' => 'Invoice already exists']);
+                exit();
+            }
+
+            // Mettre à jour le type
+            $query = $this->connection->prepare(
+                "UPDATE invoices SET ref = :ref, id_company = :id_company, created_at = :created_at, updated_at = :updated_at WHERE id = :id"
+            );
+
+            $query->bindParam(':ref', $data->ref);
+            $query->bindParam(':id_company', $data->id_company);
+            $query->bindParam(':created_at', $data->created_at);
+            $query->bindParam(':updated_at', $data->updated_at);
+            $query->bindParam(':id', $id, PDO::PARAM_INT);
+
+            return $query->execute();
+        } catch (Exception $e) {
+            throw $e;
+        }
+          
+    }
 }

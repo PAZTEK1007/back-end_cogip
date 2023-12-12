@@ -98,6 +98,21 @@ $router->mount('/api', function () use ($router) {
     $router->delete('/del-contact/(\d+)', function ($id) {
         (new HomeController())->delContact($id);
     });
+
+    // PUT METHOD  ////////////////////////////////////////////////////////////////
+    // COMPANY /////////////////////////////////////////////////////////////////
+    $router->put('/update-company/(\d+)', function ($id) {
+        (new HomeController())->updateCompany($id);
+    });
+    // INVOICE /////////////////////////////////////////////////////////////////
+    $router->put('/update-invoice/(\d+)', function ($id) {
+        (new HomeController())->updateInvoice($id);
+    });
+    // CONTACT /////////////////////////////////////////////////////////////////
+    $router->put('/update-contact/(\d+)', function ($id) {
+        (new HomeController())->updateContact($id);
+    });
+
 });
 
 $router->run();

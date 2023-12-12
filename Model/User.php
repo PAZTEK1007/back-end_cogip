@@ -4,7 +4,6 @@ namespace App\Model;
 
 use App\Model\BaseModel;
 use App\Model\Error;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use PDO;
 
 class User extends BaseModel
@@ -31,16 +30,32 @@ class User extends BaseModel
 
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($usersData) ? 500 : 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        if (empty($usersData)) 
+        {
+            $statusCode = 500;
+            $status = 'error';
+        }
+        else
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of all users',
+            'code' => $statusCode,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'data' => $usersData,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
 
 
@@ -65,16 +80,32 @@ class User extends BaseModel
         // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($usersData) ? 500 : 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        if (empty($usersData))
+        {
+            $statusCode = 500;
+            $status = 'error';
+        }
+        else
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of 5 users',
+            'code' => $statusCode,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'data' => $usersData,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
 
 
@@ -96,15 +127,31 @@ class User extends BaseModel
         // Convertir en JSON
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($usersData) ? 500 : 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        if (empty($companiesid)) 
+        {
+            $statusCode = 500;
+            $status = 'error';
+        } 
+        else 
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'users',
+            'code' => $statusCode,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'data' => $companiesid,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
 }

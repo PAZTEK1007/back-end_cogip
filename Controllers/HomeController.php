@@ -135,7 +135,6 @@ class HomeController extends Controller
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
             return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de la company."], 500);
         }
-        
     }
 
     // POST CONTACT  //////////////////////////////////////////////

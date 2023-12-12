@@ -135,7 +135,6 @@ class HomeController extends Controller
             ];
     
             header('Content-Type: application/json');
-    
             echo json_encode($response, JSON_PRETTY_PRINT);
 
         }
@@ -144,7 +143,6 @@ class HomeController extends Controller
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
         }
-        
     }
 
     // POST CONTACT  //////////////////////////////////////////////

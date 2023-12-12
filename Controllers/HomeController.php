@@ -138,6 +138,7 @@ class HomeController extends Controller
 
             echo json_encode($response, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
+            error_log("Error creating company: " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
         }

@@ -29,7 +29,7 @@ class Invoices extends BaseModel
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         echo new JsonResponse(
             $jsonData,
-            empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            empty($companiesData) ? 500: 200,
             [
                 'content-type' => 'application/json',
                 'status' => 'success'

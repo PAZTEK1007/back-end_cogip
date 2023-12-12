@@ -43,7 +43,6 @@ class HomeController extends Controller
         $this->userModel->show($id);
     }
 
-
     // GET COMPANIES   ///////////////////////////////////////////////////////////
     public function allCompanies()
     {
@@ -115,6 +114,9 @@ class HomeController extends Controller
             $typeId = $this->typesModel->getTypeIdByName($typeName);
             //vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+
+            error_log("Avant de récupérer l'id de la company");
+            error_log("Company ID: " . $companyId);
 
             //si la company existe déjà -> message d'erreur
             if (!empty($companyId)) {

@@ -130,10 +130,10 @@ class HomeController extends Controller
             $companyData['type_id'] = $typeId;
 
             // Créer l'entreprise en utilisant le modèle Companies
-            return new JsonResponse(["message" => "La company a été créée avec succès."], 200);
+            return new JsonResponse(200, ["message" => "La company a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de la company."], 500);
+            return new JsonResponse(500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
         }
         
     }
@@ -181,10 +181,10 @@ class HomeController extends Controller
             //créer le contact
             $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
             // Créer l'entreprise en utilisant le modèle Contact
-            return new JsonResponse(["message" => "Le contact a été créée avec succès."], 200);
+            return new JsonResponse(200, ["message" => "Le contact a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création du contact."], 500);
+            return new JsonResponse(500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
         }
     }
 
@@ -226,10 +226,10 @@ class HomeController extends Controller
 
             $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
             // Créer l'entreprise en utilisant le modèle Invoices
-            return new JsonResponse(["message" => "L'invoice a été créée avec succès."], 200);
+            return new JsonResponse(200, ["message" => "L'invoice a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de l'invoice'"], 500);
+            return new JsonResponse(500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
         }
     }
 }

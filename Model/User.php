@@ -154,6 +154,9 @@ class User extends BaseModel
     
         echo $jsonData;
     }
+
+    // DELETE USER BY ID ////////////////////////////////////////////////////////////////////////////////////////////
+    
     public function delete($id){
         $query = $this->connection->prepare(
             "DELETE FROM users WHERE id = :id"

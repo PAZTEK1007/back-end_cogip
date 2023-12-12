@@ -79,6 +79,11 @@ $router->mount('/api', function () use ($router) {
     $router->post('/add-invoice', function () {
         (new HomeController())->createNewInvoice();
     });
+
+    // DELETE METHOD  ////////////////////////////////////////////////////////////////
+    $router->delete('/del-user/(\d+)', function ($id) {
+        (new HomeController())->delUser($id);
+    });
 });
 
 $router->run();

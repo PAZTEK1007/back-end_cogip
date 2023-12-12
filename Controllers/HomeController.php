@@ -43,6 +43,11 @@ class HomeController extends Controller
         $this->userModel->show($id);
     }
 
+    public function delUser($id)
+    {
+        $this->userModel->delete($id);
+    }
+
     // GET COMPANIES   ///////////////////////////////////////////////////////////
     public function allCompanies()
     {

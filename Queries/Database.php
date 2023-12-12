@@ -12,10 +12,10 @@ class Database
 
     private function __construct()
     {
-        $host = "db4free.net:3306";
-        $dbname = "cogip_project";
-        $user = "keller6";
-        $password = "Le_Mot_De_Passe_:_Cogip_Project_Keller_6";
+        $host = $_ENV['DB_HOST'];
+        $dbname = $_ENV['DB_NAME'];
+        $user = $_ENV['DB_USER'];
+        $password = $_ENV['DB_PASSWORD'];
 
         try {
             // Votre code d'initialisation de la connexion à la base de données ici

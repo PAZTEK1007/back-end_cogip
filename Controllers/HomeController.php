@@ -100,6 +100,7 @@ class HomeController extends Controller
         try {
             // Récupérer le corps de la requête JSON
             $jsonBody = file_get_contents("php://input");
+
             // Transformer le JSON en un tableau PHP associatif
             $data = json_decode($jsonBody, true);
 
@@ -111,36 +112,31 @@ class HomeController extends Controller
             $companyCreated_at = $data['company_creation'];
 
             //vérifier si le type_name existe dans la db
-            $typeId = $this->typesModel->getTypeIdByName($typeName);
+            // $typeId = $this->typesModel->getTypeIdByName($typeName);
+            var_dump($typeName);
             //vérifier si company_name existe déjà dans la db
-            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            // $companyId = $this->companiesModel->getCompanyIdByName($companyName);
 
-            error_log("Avant de récupérer l'id de la company");
-            error_log("Company ID: " . $companyId);
+            // //si la company existe déjà -> message d'erreur
+            // if (!empty($companyId)) {
+            //     http_response_code(400);
+            //     echo json_encode(["message" => "La company existe deja."]);
+            //     return;
+            // }
+            // // Ajouter l'id de type à type_id de companies
+            // $companyData['type_id'] = $typeId;
+            // // Créer l'entreprise 
+            // $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
+            // $response =
+            //     [
+            //         'data' => $company,
+            //         'status' => 200,
+            //         'message' => 'La company a été créée avec succès.',
+            //     ];
 
-            //si la company existe déjà -> message d'erreur
-            if (!empty($companyId)) {
-                http_response_code(400);
-                echo json_encode(["message" => "La company existe deja."]);
-                return;
-            }
-            // Ajouter l'id de type à type_id de companies
-            $companyData['type_id'] = $typeId;
-            // Créer l'entreprise 
-            $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
-
-            $response =
-                [
-                    'data' => $company,
-                    'status' => 200,
-                    'message' => 'La company a été créée avec succès.',
-                ];
-
-            header('Content-Type: application/json');
-
-            echo json_encode($response, JSON_PRETTY_PRINT);
+            // header('Content-Type: application/json');
+            // echo json_encode($response, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
-            error_log("Error creating company: " . $e->getMessage());
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
         }
@@ -185,14 +181,13 @@ class HomeController extends Controller
 
             //ajouter l'id de la company à company_id de contact
             $contactData['company_id'] = $companyId;
-
             //créer le contact
             $contact = $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
             $response =
                 [
                     'data' => $contact,
                     'status' => 200,
-                    'message' => 'La company a été créée avec succès.',
+                    'message' => 'Le contact a été créée avec succès.',
                 ];
 
             header('Content-Type: application/json');
@@ -245,7 +240,7 @@ class HomeController extends Controller
                 [
                     'data' => $invoice,
                     'status' => 200,
-                    'message' => 'La company a été créée avec succès.',
+                    'message' => 'La facture a été créée avec succès.',
                 ];
 
             header('Content-Type: application/json');
@@ -258,8 +253,3 @@ class HomeController extends Controller
         }
     }
 }
-
-
-
-
-//vérifier si tous les champs sont remplis sinon erreur 500 + précision

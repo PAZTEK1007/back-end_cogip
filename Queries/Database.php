@@ -17,6 +17,7 @@ class Database
         $user = $_ENV['DB_USER'];
         $password = $_ENV['DB_PASSWORD'];
 
+
         try {
             // Votre code d'initialisation de la connexion à la base de données ici
             $this->connection = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);

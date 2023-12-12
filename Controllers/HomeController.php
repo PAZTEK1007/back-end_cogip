@@ -43,7 +43,6 @@ class HomeController extends Controller
         $this->userModel->show($id);
     }
 
-
     // GET COMPANIES   ///////////////////////////////////////////////////////////
     public function allCompanies()
     {

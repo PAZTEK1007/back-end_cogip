@@ -126,22 +126,20 @@ class HomeController extends Controller
             $companyData['type_id'] = $typeId;
             // Créer l'entreprise 
             $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
-            
-            $response = 
-            [
-                'data' => $company,
-                'status' => 200,
-                'message' => 'La company a été créée avec succès.',
-            ];
-    
-            header('Content-Type: application/json');
-            echo json_encode($response, JSON_PRETTY_PRINT);
 
-        }
-        catch (Exception $e) 
-        {
+            $response =
+                [
+                    'data' => $company,
+                    'status' => 200,
+                    'message' => 'La company a été créée avec succès.',
+                ];
+
+            header('Content-Type: application/json');
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
+            echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
         }
     }
 
@@ -187,21 +185,18 @@ class HomeController extends Controller
 
             //créer le contact
             $contact = $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
-            $response = 
-            [
-                'data' => $contact,
-                'status' => 200,
-                'message' => 'La company a été créée avec succès.',
-            ];
-    
+            $response =
+                [
+                    'data' => $contact,
+                    'status' => 200,
+                    'message' => 'La company a été créée avec succès.',
+                ];
+
             header('Content-Type: application/json');
             echo json_encode($response, JSON_PRETTY_PRINT);
-
-        }
-        catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
+            echo json_encode(["message" => "Une erreur s'est produite lors de la creation du contact."], JSON_PRETTY_PRINT);
         }
     }
 
@@ -243,23 +238,20 @@ class HomeController extends Controller
 
             $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
 
-            $response = 
-            [
-                'data' => $invoice,
-                'status' => 200,
-                'message' => 'La company a été créée avec succès.',
-            ];
-    
-            header('Content-Type: application/json');
-    
-            echo json_encode($response, JSON_PRETTY_PRINT);
+            $response =
+                [
+                    'data' => $invoice,
+                    'status' => 200,
+                    'message' => 'La company a été créée avec succès.',
+                ];
 
-        }
-        catch (Exception $e) 
-        {
-    
+            header('Content-Type: application/json');
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+
             http_response_code(500);
-            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
+            echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la facture."], JSON_PRETTY_PRINT);
         }
     }
 }

@@ -10,6 +10,8 @@ use App\Model\Contacts;
 use App\Model\Types;
 use Exception;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 
 class HomeController extends Controller
@@ -128,10 +130,12 @@ class HomeController extends Controller
             $companyData['type_id'] = $typeId;
 
             // Créer l'entreprise en utilisant le modèle Companies
-            $this->companiesModel->createCompany($typeId, $companyName, $type_id, $country, $tva, $companyCreated_at);
+            return new JsonResponse(["message" => "La company a été créée avec succès."], 200);
         } catch (Exception $e) {
-            throw $e;
+            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
+            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de la company."], 500);
         }
+        
     }
 
     // POST CONTACT  //////////////////////////////////////////////
@@ -176,8 +180,11 @@ class HomeController extends Controller
 
             //créer le contact
             $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
+            // Créer l'entreprise en utilisant le modèle Contact
+            return new JsonResponse(["message" => "Le contact a été créée avec succès."], 200);
         } catch (Exception $e) {
-            throw $e;
+            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
+            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création du contact."], 500);
         }
     }
 
@@ -218,8 +225,11 @@ class HomeController extends Controller
             $invoiceData['id_company'] = $companyId;
 
             $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
+            // Créer l'entreprise en utilisant le modèle Invoices
+            return new JsonResponse(["message" => "L'invoice a été créée avec succès."], 200);
         } catch (Exception $e) {
-            throw $e;
+            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
+            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de l'invoice'"], 500);
         }
     }
 }

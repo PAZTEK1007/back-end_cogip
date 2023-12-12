@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use App\Model\BaseModel;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use PDO;
 use Exception;
 
@@ -26,17 +25,34 @@ class Invoices extends BaseModel
         //JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($companiesData) ? 500: 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        if (empty($companiesData))
+        {
+            $statusCode = 500;
+            $status = 'error';
+        }
+        else 
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of all invoices',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesData,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
+
 
 
 
@@ -58,17 +74,34 @@ class Invoices extends BaseModel
         //JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $jsonData,
-            empty($companiesData) ? 500 : 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        if (empty($companiesData))
+        {
+            $statusCode = 500;
+            $status = 'error';
+        }
+        else
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of 5 invoices',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesData,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
+    
 
 
     // GET INVOICE BY ID ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,17 +120,35 @@ class Invoices extends BaseModel
 
         // Convertir en JSON 
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
-        // Définir les en-têtes pour indiquer que la réponse est au format JSON
-        echo new JsonResponse(
-            $companiesData,
-            empty($companiesid) ? 500 : 200,
-            [
-                'content-type' => 'application/json',
-                'status' => 'success'
-            ],
-            true
-        );
+        
+        if (empty($companiesid))
+        {
+            $statusCode = 500;
+            $status = 'error';
+        }
+        else
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of invoices by id',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesid,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
     }
+    
 
     // POST METHOD /////////////////////////////////////////////////////////////////////////////////
     public function createInvoice($ref, $id_company, $invoiceCreated_at)

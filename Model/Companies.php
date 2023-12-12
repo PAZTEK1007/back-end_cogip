@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use App\Model\BaseModel;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PDO;
 use Exception;
@@ -30,7 +29,7 @@ class Companies extends BaseModel
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         echo new JsonResponse(
             $jsonData,
-            empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            empty($companiesData) ? 500 : 200,
             [
                 'content-type' => 'application/json',
                 'status' => 'success'
@@ -60,7 +59,7 @@ class Companies extends BaseModel
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         echo new JsonResponse(
             $jsonData,
-            empty($companiesData) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            empty($companiesData) ? 500 : 200,
             [
                 'content-type' => 'application/json',
                 'status' => 'success'
@@ -87,7 +86,7 @@ class Companies extends BaseModel
         // Définir les en-têtes pour indiquer que la réponse est au format JSON
         echo new JsonResponse(
             $companiesData,
-            empty($companiesid) ? Response::HTTP_NOT_FOUND : Response::HTTP_OK,
+            empty($companiesid) ? 500 : 200,
             [
                 'content-type' => 'application/json',
                 'status' => 'success'

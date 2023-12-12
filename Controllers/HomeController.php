@@ -128,12 +128,13 @@ class HomeController extends Controller
             }
             // Ajouter l'id de type à type_id de companies
             $companyData['type_id'] = $typeId;
-
+            // Créer l'entreprise 
+            $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
             // Créer l'entreprise en utilisant le modèle Companies
-            return new JsonResponse(["message" => "La company a été créée avec succès."], 200);
+            return new JsonResponse($company, 200, ["message" => "La company a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de la company."], 500);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
         }
     }
 
@@ -178,12 +179,12 @@ class HomeController extends Controller
             $contactData['company_id'] = $companyId;
 
             //créer le contact
-            $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
+            $contact = $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
             // Créer l'entreprise en utilisant le modèle Contact
-            return new JsonResponse(["message" => "Le contact a été créée avec succès."], 200);
+            return new JsonResponse($contact, 200, ["message" => "Le contact a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création du contact."], 500);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
         }
     }
 
@@ -223,12 +224,12 @@ class HomeController extends Controller
             // Ajouter l'id de la company à company_id de invoices
             $invoiceData['id_company'] = $companyId;
 
-            $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
+            $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
             // Créer l'entreprise en utilisant le modèle Invoices
-            return new JsonResponse(["message" => "L'invoice a été créée avec succès."], 200);
+            return new JsonResponse($invoice, 200, ["message" => "L'invoice a été créée avec succès."], true);
         } catch (Exception $e) {
             // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse(["message" => "Une erreur s'est produite lors de la création de l'invoice'"], 500);
+            return new JsonResponse($e, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
         }
     }
 }

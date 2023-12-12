@@ -10,10 +10,6 @@ use App\Model\Contacts;
 use App\Model\Types;
 use Exception;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-
-
 class HomeController extends Controller
 {
     private $userModel;
@@ -130,14 +126,33 @@ class HomeController extends Controller
             $companyData['type_id'] = $typeId;
             // Créer l'entreprise 
             $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
-            // Créer l'entreprise en utilisant le modèle Companies
-            return new JsonResponse($company, 200, ["message" => "La company a été créée avec succès."], true);
-        } catch (Exception $e) {
-            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($company, 500, ["message" => "Une erreur s'est produite lors de la création de la company."], true);
+            
+            $response = 
+            [
+                'data' => $company,
+                'status' => 200,
+                'message' => 'La company a été créée avec succès.',
+            ];
+    
+            header('Content-Type: application/json');
+    
+            echo json_encode($response, JSON_PRETTY_PRINT);
+
         }
-        
+        catch (Exception $e) 
+        {
+            if ($this->connection->inTransaction()) 
+            {
+                $this->connection->rollBack();
+            }
+    
+            http_response_code(500);
+    
+            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
+        }
     }
+        
+    
 
     // POST CONTACT  //////////////////////////////////////////////
     public function createNewContact()
@@ -181,11 +196,28 @@ class HomeController extends Controller
 
             //créer le contact
             $contact = $this->contactsModel->createContact($contactName, $companyId, $email, $phone, $contactCreated_at);
-            // Créer l'entreprise en utilisant le modèle Contact
-            return new JsonResponse($contact, 200, ["message" => "Le contact a été créée avec succès."], true);
-        } catch (Exception $e) {
-            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($contact, 500, ["message" => "Une erreur s'est produite lors de la création du contact."], true);
+            $response = 
+            [
+                'data' => $contact,
+                'status' => 200,
+                'message' => 'La company a été créée avec succès.',
+            ];
+    
+            header('Content-Type: application/json');
+    
+            echo json_encode($response, JSON_PRETTY_PRINT);
+
+        }
+        catch (Exception $e) 
+        {
+            if ($this->connection->inTransaction()) 
+            {
+                $this->connection->rollBack();
+            }
+    
+            http_response_code(500);
+    
+            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
         }
     }
 
@@ -226,11 +258,29 @@ class HomeController extends Controller
             $invoiceData['id_company'] = $companyId;
 
             $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
-            // Créer l'entreprise en utilisant le modèle Invoices
-            return new JsonResponse($invoice, 200, ["message" => "L'invoice a été créée avec succès."], true);
-        } catch (Exception $e) {
-            // Capturer les exceptions et renvoyer une réponse JSON d'erreur
-            return new JsonResponse($invoice, 500, ["message" => "Une erreur s'est produite lors de la création de l'invoice'"], true);
+
+            $response = 
+            [
+                'data' => $invoice,
+                'status' => 200,
+                'message' => 'La company a été créée avec succès.',
+            ];
+    
+            header('Content-Type: application/json');
+    
+            echo json_encode($response, JSON_PRETTY_PRINT);
+
+        }
+        catch (Exception $e) 
+        {
+            if ($this->connection->inTransaction()) 
+            {
+                $this->connection->rollBack();
+            }
+    
+            http_response_code(500);
+    
+            echo json_encode(["message" => "Une erreur s'est produite lors de la création de la company."], JSON_PRETTY_PRINT);
         }
     }
 }

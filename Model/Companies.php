@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use App\Model\BaseModel;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use PDO;
 use Exception;
 

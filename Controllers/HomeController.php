@@ -48,6 +48,8 @@ class HomeController extends Controller
         $this->userModel->delete($id);
     }
 
+
+
     // GET COMPANIES   ///////////////////////////////////////////////////////////
     public function allCompanies()
     {
@@ -63,71 +65,8 @@ class HomeController extends Controller
     {
         $this->companiesModel->show($id);
     }
-    // DELETE COMPANY   ////////////////////////////////////////////////////////
-    public function delCompany($id)
-    {
-        $this->companiesModel->delete($id);
-    }
-    // UPDATE COMPANY  ////////////////////////////////////////////////////////
-    public function updateCompany($id)
-    {
-        $this->companiesModel->update($id);
-    }
 
-    //  GET INVOICES  ////////////////////////////////
-
-    public function allInvoices()
-    {
-        $this->invoicesModel->getAllInvoices();
-    }
-    public function fiveInvoices()
-    {
-        $this->invoicesModel->getFirstFiveInvoices();
-    }
-
-    public function showInvoice($id)
-    {
-        $this->invoicesModel->show($id);
-    }
-
-    // DELETE INVOICE   ////////////////////////////////////////////////////////
-    public function delInvoice($id)
-    {
-        $this->invoicesModel->delete($id);
-    }
-    // UPDATE INVOICE  ////////////////////////////////////////////////////////
-    public function updateInvoice($id)
-    {
-        $this->invoicesModel->updateInvoice($id);
-    }
-
-    // GET CONTACTS   ///////////////////////////////////////////////
-    public function allContacts()
-    {
-        $this->contactsModel->getAllContacts();
-    }
-
-    public function fiveContacts()
-    {
-        $this->contactsModel->getFirstFiveContacts();
-    }
-
-    public function showContact($id)
-    {
-        $this->contactsModel->show($id);
-    }
-    // DELETE CONTACT   ////////////////////////////////////////////////////////
-    public function delContact($id)
-    {
-        $this->contactsModel->delete($id);
-    }
-    // UPDATE CONTACT  ////////////////////////////////////////////////////////
-    public function updateContact($id)
-    {
-        $this->contactsModel->update($id);
-    }
     // POST COMPANY   ///////////////////////////////////////
-
     public function createNewCompany()
     {
         try {
@@ -173,6 +112,119 @@ class HomeController extends Controller
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
         }
+    }
+
+    // DELETE COMPANY   ////////////////////////////////////////////////////////
+    public function delCompany($id)
+    {
+        $this->companiesModel->delete($id);
+    }
+
+    // UPDATE COMPANY  ////////////////////////////////////////////////////////
+    public function updateCompany($id)
+    {
+        $this->companiesModel->update($id);
+    }
+
+
+
+    //  GET INVOICES  ////////////////////////////////
+    public function allInvoices()
+    {
+        $this->invoicesModel->getAllInvoices();
+    }
+    public function fiveInvoices()
+    {
+        $this->invoicesModel->getFirstFiveInvoices();
+    }
+
+    public function showInvoice($id)
+    {
+        $this->invoicesModel->show($id);
+    }
+
+    // POST INVOICE //////////////////////////////////////////////////
+    public function createNewInvoice()
+    {
+        try {
+            // Récupérer le corps de la requête JSON
+            $jsonBody = file_get_contents("php://input");
+            // Transformer le JSON en un tableau PHP associatif
+            $data = json_decode($jsonBody, true);
+
+            $ref = $data['ref'];
+            $date_due = $data['date_due'];
+            $invoiceCreated_at = $data['invoice_creation'];
+            $companyName = $data['company_name'];
+
+            // Vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //vérifier si ref existe déjà ans la db
+            $invoiceId = $this->invoicesModel->getInvoiceIdByName($ref);
+
+            // Si l'entreprise n'existe pas -> message d'erreur
+            if (!$companyId) {
+                http_response_code(400);
+                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter une facture."]);
+                return;
+            }
+            //si la ref existe déjà -> message d'erreur
+            if (!empty($invoiceId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La facture existe deja."]);
+                return;
+            }
+
+            // Ajouter l'id de la company à company_id de invoices
+            $invoiceData['id_company'] = $companyId;
+
+            $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $date_due, $invoiceCreated_at);
+
+            $response =
+                [
+                    'data' => $invoice,
+                    'status' => 200,
+                    'message' => 'La facture a été créée avec succès.',
+                ];
+
+            header('Content-Type: application/json');
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+
+            http_response_code(500);
+            echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la facture."], JSON_PRETTY_PRINT);
+        }
+    }
+
+    // DELETE INVOICE   ////////////////////////////////////////////////////////
+    public function delInvoice($id)
+    {
+        $this->invoicesModel->delete($id);
+    }
+
+    // UPDATE INVOICE  ////////////////////////////////////////////////////////
+    public function updateInvoice($id)
+    {
+        $this->invoicesModel->updateInvoice($id);
+    }
+
+
+
+    // GET CONTACTS   ///////////////////////////////////////////////
+    public function allContacts()
+    {
+        $this->contactsModel->getAllContacts();
+    }
+
+    public function fiveContacts()
+    {
+        $this->contactsModel->getFirstFiveContacts();
+    }
+
+    public function showContact($id)
+    {
+        $this->contactsModel->show($id);
     }
 
     // POST CONTACT  //////////////////////////////////////////////
@@ -231,59 +283,15 @@ class HomeController extends Controller
         }
     }
 
-
-    // POST INVOICE //////////////////////////////////////////////////
-
-    public function createNewInvoice()
+    // DELETE CONTACT   ////////////////////////////////////////////////////////
+    public function delContact($id)
     {
-        try {
-            // Récupérer le corps de la requête JSON
-            $jsonBody = file_get_contents("php://input");
-            // Transformer le JSON en un tableau PHP associatif
-            $data = json_decode($jsonBody, true);
+        $this->contactsModel->delete($id);
+    }
 
-            $ref = $data['ref'];
-            $date_due = $data['date_due'];
-            $invoiceCreated_at = $data['invoice_creation'];
-            $companyName = $data['company_name'];
-
-            // Vérifier si company_name existe déjà dans la db
-            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
-            //vérifier si ref existe déjà ans la db
-            $invoiceId = $this->invoicesModel->getInvoiceIdByName($ref);
-
-            // Si l'entreprise n'existe pas -> message d'erreur
-            if (!$companyId) {
-                http_response_code(400);
-                echo json_encode(["message" => "L'entreprise n'existe pas. Veuillez creer l'entreprise avant d'ajouter une facture."]);
-                return;
-            }
-            //si la ref existe déjà -> message d'erreur
-            if (!empty($invoiceId)) {
-                http_response_code(400);
-                echo json_encode(["message" => "La facture existe deja."]);
-                return;
-            }
-
-            // Ajouter l'id de la company à company_id de invoices
-            $invoiceData['id_company'] = $companyId;
-
-            $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $date_due, $invoiceCreated_at);
-
-            $response =
-                [
-                    'data' => $invoice,
-                    'status' => 200,
-                    'message' => 'La facture a été créée avec succès.',
-                ];
-
-            header('Content-Type: application/json');
-
-            echo json_encode($response, JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-
-            http_response_code(500);
-            echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la facture."], JSON_PRETTY_PRINT);
-        }
+    // UPDATE CONTACT  ////////////////////////////////////////////////////////
+    public function updateContact($id)
+    {
+        $this->contactsModel->update($id);
     }
 }

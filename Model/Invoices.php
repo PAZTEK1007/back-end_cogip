@@ -174,11 +174,12 @@ class Invoices extends BaseModel
         return $result ? $result['id'] : null;
     }
     // DELETE INVOICE BY ID ////////////////////////////////////////////////////////////////////////////////////////////
-    public function delete($id){
+    public function delete($id)
+    {
         $query = $this->connection->prepare(
             "DELETE FROM invoices WHERE id = :id"
         );
-    
+
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -186,33 +187,33 @@ class Invoices extends BaseModel
         // Convertir en JSON
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        if (empty($companiesid)) 
-        {
+        if (empty($companiesid)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of invoices by id',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of invoices by id',
+                'content-type' => 'application/json',
+                'code' => $statusCode,
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
         echo $jsonData;
     }
+
+
+    //  UPDATE INVOICE //////////////////////////////////////////////////
     public function updateInvoice($id)
     {
         try {
@@ -232,11 +233,12 @@ class Invoices extends BaseModel
 
             // Mettre à jour le type
             $query = $this->connection->prepare(
-                "UPDATE invoices SET ref = :ref, id_company = :id_company, created_at = :created_at, updated_at = :updated_at WHERE id = :id"
+                "UPDATE invoices SET ref = :ref, id_company = :id_company, date_due = :date_due, created_at = :created_at, updated_at = :updated_at WHERE id = :id"
             );
 
             $query->bindParam(':ref', $data->ref);
             $query->bindParam(':id_company', $data->id_company);
+            $query->bindParam(':cate_due', $data->date_due);
             $query->bindParam(':created_at', $data->created_at);
             $query->bindParam(':updated_at', $data->updated_at);
             $query->bindParam(':id', $id, PDO::PARAM_INT);
@@ -245,6 +247,5 @@ class Invoices extends BaseModel
         } catch (Exception $e) {
             throw $e;
         }
-          
     }
 }

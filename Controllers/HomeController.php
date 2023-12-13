@@ -210,6 +210,7 @@ class HomeController extends Controller
             $data = json_decode($jsonBody, true);
 
             $ref = $data['ref'];
+            $date_due = $data['date_due'];
             $invoiceCreated_at = $data['invoice_creation'];
             $companyName = $data['company_name'];
 
@@ -234,7 +235,7 @@ class HomeController extends Controller
             // Ajouter l'id de la company à company_id de invoices
             $invoiceData['id_company'] = $companyId;
 
-            $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $invoiceCreated_at);
+            $invoice = $this->invoicesModel->createInvoice($ref, $companyId, $date_due, $invoiceCreated_at);
 
             $response =
                 [

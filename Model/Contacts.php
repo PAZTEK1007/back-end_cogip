@@ -25,31 +25,28 @@ class Contacts extends BaseModel
         //JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
-        if (empty($companiesData)) 
-        {
+        if (empty($companiesData)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of all contacts',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesData,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of all contacts',
+                'content-type' => 'application/json',
+                'code' => $statusCode,
+                'status' => $status,
+                'data' => $companiesData,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
         echo $jsonData;
     }
 
@@ -62,6 +59,7 @@ class Contacts extends BaseModel
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id
+         ORDER BY contacts.created_at DESC
          LIMIT 5 OFFSET 0"
         );
         $query->execute();
@@ -70,31 +68,28 @@ class Contacts extends BaseModel
 
         $jsonData = json_encode($companiesData, JSON_PRETTY_PRINT);
 
-        if (empty($companiesData)) 
-        {
+        if (empty($companiesData)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of 5 contacts',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesData,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of 5 contacts',
+                'content-type' => 'application/json',
+                'code' => $statusCode,
+                'status' => $status,
+                'data' => $companiesData,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
         echo $jsonData;
     }
 
@@ -114,31 +109,28 @@ class Contacts extends BaseModel
 
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        if (empty($companiesid)) 
-        {
+        if (empty($companiesid)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of contact by id',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of contact by id',
+                'content-type' => 'application/json',
+                'code' => $statusCode,
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
         echo $jsonData;
     }
 

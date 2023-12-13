@@ -12,14 +12,14 @@ class Database
 
     private function __construct()
     {
-        $host = $_ENV['DB_HOST'];
-        $dbname = $_ENV['DB_NAME'];
-        $user = $_ENV['DB_USER'];
-        $password = $_ENV['DB_PASSWORD'];
+        $host = $_ENV["HOST"] ?? null;
+        $dbname = $_ENV["DBNAME"] ?? null;
+        $user = $_ENV["USER"] ?? null;
+        $password = $_ENV["PASSWORD"] ?? null;
 
         try {
             // Votre code d'initialisation de la connexion à la base de données ici
-            $this->connection = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+            $this->connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             // Gérer les erreurs de connexion ici

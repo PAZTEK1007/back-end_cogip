@@ -12,10 +12,10 @@ class Database
 
     private function __construct()
     {
-        $host = $_ENV["HOST"] ?? null;
-        $dbname = $_ENV["DBNAME"] ?? null;
-        $user = $_ENV["USER"] ?? null;
-        $password = $_ENV["PASSWORD"] ?? null;
+        $host = $_ENV["DB_HOST"] ?? null;
+        $dbname = $_ENV["DB_NAME"] ?? null;
+        $user = $_ENV["DB_USER"] ?? null;
+        $password = $_ENV["DB_PASSWORD"] ?? null;
 
         try {
             // Votre code d'initialisation de la connexion à la base de données ici

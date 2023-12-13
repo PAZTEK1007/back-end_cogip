@@ -78,36 +78,35 @@ class HomeController extends Controller
 
             $typeName = $data['type_name'];
             $companyName = $data['company_name'];
-            $type_id = $data['type_id'];
             $country = $data['country'];
             $tva = $data['tva'];
             $companyCreated_at = $data['company_creation'];
 
-            //vérifier si le type_name existe dans la db
-            // $typeId = $this->typesModel->getTypeIdByName($typeName);
-            var_dump($typeName);
-            //vérifier si company_name existe déjà dans la db
-            // $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+            //valider et sanitiser ici
 
-            // //si la company existe déjà -> message d'erreur
-            // if (!empty($companyId)) {
-            //     http_response_code(400);
-            //     echo json_encode(["message" => "La company existe deja."]);
-            //     return;
-            // }
-            // // Ajouter l'id de type à type_id de companies
-            // $companyData['type_id'] = $typeId;
-            // // Créer l'entreprise 
-            // $company = $this->companiesModel->createCompany($companyName, $type_id, $country, $tva, $companyCreated_at);
-            // $response =
-            //     [
-            //         'data' => $company,
-            //         'status' => 200,
-            //         'message' => 'La company a été créée avec succès.',
-            //     ];
+            // vérifier si le type_name existe dans la db
+            $typeId = $this->typesModel->getTypeIdByName($typeName);
 
-            // header('Content-Type: application/json');
-            // echo json_encode($response, JSON_PRETTY_PRINT);
+            // vérifier si company_name existe déjà dans la db
+            $companyId = $this->companiesModel->getCompanyIdByName($companyName);
+
+            //si la company existe déjà -> message d'erreur
+            if (!empty($companyId)) {
+                http_response_code(400);
+                echo json_encode(["message" => "La company existe deja."]);
+                return;
+            }
+            // Créer l'entreprise 
+            $company = $this->companiesModel->createCompany($companyName, $typeId, $country, $tva, $companyCreated_at);
+            $response =
+                [
+                    'data' => $company,
+                    'status' => 200,
+                    'message' => 'La company a été créée avec succès.',
+                ];
+
+            header('Content-Type: application/json');
+            echo json_encode($response, JSON_PRETTY_PRINT);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);

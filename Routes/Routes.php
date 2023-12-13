@@ -79,6 +79,40 @@ $router->mount('/api', function () use ($router) {
     $router->post('/add-invoice', function () {
         (new HomeController())->createNewInvoice();
     });
+
+    // DELETE METHOD  ////////////////////////////////////////////////////////////////
+
+    // USER /////////////////////////////////////////////////////////////////////
+    $router->delete('/del-user/(\d+)', function ($id) {
+        (new HomeController())->delUser($id);
+    });
+    // COMPANY /////////////////////////////////////////////////////////////////
+    $router->delete('/del-company/(\d+)', function ($id) {
+        (new HomeController())->delCompany($id);
+    });
+    // INVOICE /////////////////////////////////////////////////////////////////
+    $router->delete('/del-invoice/(\d+)', function ($id) {
+        (new HomeController())->delInvoice($id);
+    });
+    // CONTACT /////////////////////////////////////////////////////////////////
+    $router->delete('/del-contact/(\d+)', function ($id) {
+        (new HomeController())->delContact($id);
+    });
+
+    // PUT METHOD  ////////////////////////////////////////////////////////////////
+    // COMPANY /////////////////////////////////////////////////////////////////
+    $router->put('/update-company/(\d+)', function ($id) {
+        (new HomeController())->updateCompany($id);
+    });
+    // INVOICE /////////////////////////////////////////////////////////////////
+    $router->put('/update-invoice/(\d+)', function ($id) {
+        (new HomeController())->updateInvoice($id);
+    });
+    // CONTACT /////////////////////////////////////////////////////////////////
+    $router->put('/update-contact/(\d+)', function ($id) {
+        (new HomeController())->updateContact($id);
+    });
+
 });
 
 $router->run();

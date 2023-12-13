@@ -42,6 +42,11 @@ class HomeController extends Controller
     {
         $this->userModel->show($id);
     }
+    // DELETE USER   ////////////////////////////////////////////////////////
+    public function delUser($id)
+    {
+        $this->userModel->delete($id);
+    }
 
     // GET COMPANIES   ///////////////////////////////////////////////////////////
     public function allCompanies()
@@ -58,7 +63,16 @@ class HomeController extends Controller
     {
         $this->companiesModel->show($id);
     }
-
+    // DELETE COMPANY   ////////////////////////////////////////////////////////
+    public function delCompany($id)
+    {
+        $this->companiesModel->delete($id);
+    }
+    // UPDATE COMPANY  ////////////////////////////////////////////////////////
+    public function updateCompany($id)
+    {
+        $this->companiesModel->update($id);
+    }
 
     //  GET INVOICES  ////////////////////////////////
 
@@ -76,6 +90,17 @@ class HomeController extends Controller
         $this->invoicesModel->show($id);
     }
 
+    // DELETE INVOICE   ////////////////////////////////////////////////////////
+    public function delInvoice($id)
+    {
+        $this->invoicesModel->delete($id);
+    }
+    // UPDATE INVOICE  ////////////////////////////////////////////////////////
+    public function updateInvoice($id)
+    {
+        $this->invoicesModel->update($id);
+    }
+
     // GET CONTACTS   ///////////////////////////////////////////////
     public function allContacts()
     {
@@ -91,8 +116,16 @@ class HomeController extends Controller
     {
         $this->contactsModel->show($id);
     }
-
-
+    // DELETE CONTACT   ////////////////////////////////////////////////////////
+    public function delContact($id)
+    {
+        $this->contactsModel->delete($id);
+    }
+    // UPDATE CONTACT  ////////////////////////////////////////////////////////
+    public function updateContact($id)
+    {
+        $this->contactsModel->update($id);
+    }
     // POST COMPANY   ///////////////////////////////////////
 
     public function createNewCompany()

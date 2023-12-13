@@ -175,4 +175,80 @@ class Contacts extends BaseModel
         //retourner l'ID du contact si une correspondance sinon retourner null
         return $result ? $result['id'] : null;
     }
+    // DELETE CONTACT BY ID //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function delete($id)
+    {
+        $query = $this->connection->prepare(
+            "DELETE FROM contacts WHERE id = :id"
+        );
+
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
+
+        if (empty($companiesid)) 
+        {
+            $statusCode = 500;
+            $status = 'error';
+        } 
+        else 
+        {
+            $statusCode = 200;
+            $status = 'success';
+        }
+    
+        $response = 
+        [
+            'message' => 'List of contacts by id',
+            'content-type' => 'application/json',
+            'code' => $statusCode,
+            'status' => $status,
+            'data' => $companiesid,
+        ];
+    
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+    
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+    
+        echo $jsonData;
+
+    }
+    public function update($id)
+    {
+        try {
+            // Récupérer le corps de la requête JSON
+            $body = file_get_contents('php://input');
+            $data = json_decode($body);
+
+            // Vérifier si le contact existe déjà
+            $contactId = $this->getContactIdByName($data->name);
+
+            // Si le contact existe déjà, on retourne une erreur
+            if ($contactId) {
+                http_response_code(409);
+                return json_encode(['message' => 'Contact already exists']);
+            }
+
+             // Mettre à jour le type
+             $query = $this->connection->prepare(
+                "UPDATE contacts SET name = :name , company_id = :company_id, email = :email, phone = :phone, created_at = :created_at, updated_at = :updated_at WHERE id = :id"
+            );
+
+            $query->bindParam(':name', $data->name);
+            $query->bindParam(':company_id', $data->company_id);
+            $query->bindParam(':email', $data->email);
+            $query->bindParam(':phone', $data->phone);
+            $query->bindParam(':created_at', $data->created_at);
+            $query->bindParam(':updated_at', $data->updated_at);
+            $query->bindParam(':id', $id, PDO::PARAM_INT);
+
+            return $query->execute();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }

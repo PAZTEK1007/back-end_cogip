@@ -98,7 +98,7 @@ class HomeController extends Controller
     // UPDATE INVOICE  ////////////////////////////////////////////////////////
     public function updateInvoice($id)
     {
-        $this->invoicesModel->update($id);
+        $this->invoicesModel->updateInvoice($id);
     }
 
     // GET CONTACTS   ///////////////////////////////////////////////

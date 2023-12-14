@@ -47,6 +47,9 @@ class HomeController extends Controller
     {
         $this->userModel->delete($id);
     }
+    public function register(){
+        $this->userModel->register();
+    }
 
 
 

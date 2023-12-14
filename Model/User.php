@@ -5,6 +5,8 @@ namespace App\Model;
 use App\Model\BaseModel;
 use App\Model\Error;
 use PDO;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class User extends BaseModel
 {

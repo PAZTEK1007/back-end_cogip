@@ -4,8 +4,10 @@ namespace App\Routes;
 
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
+use App\Model\Auth;
 
 
+$auth = new Auth($_ENV["SECRET_KEY"]);
 $router = new Router();
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -16,9 +18,45 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 
-$router->mount('/api', function () use ($router) {
-    // GET METHOD  //////////////////////////////////////////////////////
 
+$router->mount('/api', function () use ($router, $auth) {
+    // GET METHOD  //////////////////////////////////////////////////////
+    $router->get('/login', function () use ($auth) {
+        try {
+            $token = $auth->authenticate("admin", "motdepasse");
+            $decodedToken = $auth->verifyToken($token);
+
+            if ($decodedToken) {
+                echo "Token valide. Données du token : \n";
+                print_r($decodedToken);
+            } else {
+                echo "Token invalide.\n";
+            }
+        } catch (\Exception $e) {
+            echo "Erreur d'authentification : " . $e->getMessage();
+        }
+        
+        $token = $auth->authenticate("admin", "motdepasse");
+        $decodedToken = $auth->verifyToken($token);
+        
+            if ($decodedToken) {
+                echo "Token valide. Données du token : \n";
+                print_r($decodedToken);
+            } else {
+                echo "Token invalide.\n";
+            }
+       
+    });
+    
+    $router->before('GET', '/users', function () use ($auth) {
+        $token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+    
+        if (!$auth->verifyToken($token)) {
+            echo "Accès non autorisé. Token invalide.";
+            exit;
+        }
+    });
+    
     // USERS /////////////////////////////////////////////////////////////////
     $router->get('/users', function () {
         (new HomeController())->allUsers();

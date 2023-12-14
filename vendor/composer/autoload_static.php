@@ -38,6 +38,7 @@ class ComposerStaticInit8e38566b8dfc5b7183fea771bb678f07
         ),
         'D' => 
         array (
+            'DragonBe\\Vies\\' => 14,
             'Dotenv\\' => 7,
         ),
         'A' => 
@@ -82,6 +83,10 @@ class ComposerStaticInit8e38566b8dfc5b7183fea771bb678f07
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
+        'DragonBe\\Vies\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dragonbe/vies/src/Vies',
         ),
         'Dotenv\\' => 
         array (

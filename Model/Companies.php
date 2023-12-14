@@ -15,7 +15,8 @@ class Companies extends BaseModel
         $query = $this->connection->prepare(
             "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
         FROM types 
-        JOIN companies ON types.id = companies.type_id"
+        JOIN companies ON types.id = companies.type_id
+        ORDER BY companies.name ASC"
         );
         $query->execute();
         $companiesData = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -96,21 +97,101 @@ class Companies extends BaseModel
         echo $jsonData;
     }
 
-
     // GET COMPANY BY ID ///////////////////////////////////////////////////////////////
-    public function show($id)
+    public function show($companyId)
+    {
+        // Récupérer les détails de la compagnie par ID
+        $companyDetails = $this->getCompanyById($companyId);
+
+        $jsonData = json_encode($companyDetails, JSON_PRETTY_PRINT);
+        // Vérifier si la compagnie a été trouvée
+        if (!$companyDetails) {
+            $message = 'Company not found';
+            $statusCode = 404;
+            $status = 'error';
+        } else {
+            $message = 'Company details';
+            $statusCode = 200;
+            $status = 'success';
+        }
+        // Retourner une réponse JSON avec un statut d'erreur
+        $response = [
+            'message' => $message,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'code' => $statusCode,
+            'data' => $companyDetails,
+        ];
+
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+
+        echo $jsonData;
+    }
+
+    // Méthode pour récupérer les détails de la compagnie par son identifiant
+    private function getCompanyById($companyId)
+    {
+
+        $query = $this->connection->prepare(
+            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name AS contact_name
+        FROM types 
+        JOIN companies ON types.id = companies.type_id
+        JOIN contacts ON companies.id = contacts.company_id
+        WHERE companies.id = :id"
+        );
+        $query->bindParam(':id', $companyId, PDO::PARAM_INT);
+        $query->execute();
+        $companyDetails = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $companyDetails;
+    }
+
+
+    // POST NEW COMPANY  ////////////////////////////////////////////////////////////////
+    public function createCompany($companyName, $type_id, $country, $tva)
+    {
+        try {
+            // Insérer dans la table Companies
+            $query = $this->connection->prepare("INSERT INTO companies (name, type_id, country, tva) VALUES (:name, :type_id, :country, :tva)");
+
+            $query->bindParam(':name', $companyName);
+            $query->bindParam(':type_id', $type_id);
+            $query->bindParam(':country', $country);
+            $query->bindParam(':tva', $tva);
+            return $query->execute();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    //vérifier si la company existe déjà et récupérer son ID si c'est le cas
+    public function getCompanyIdByName($companyName)
+    {
+        $query = $this->connection->prepare("SELECT id FROM companies WHERE name = :companyName");
+        $query->bindParam(':companyName', $companyName);
+        $query->execute();
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        //retourner l'ID de l'entreprise si une correspondance sinon retourner null
+        return $result ? $result['id'] : null;
+    }
+    // DELETE COMPANY BY ID ////////////////////////////////////////////////////////////////////////////////////////////
+    public function delete($id)
     {
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
-         FROM types 
-         JOIN companies ON types.id = companies.type_id
-         WHERE companies.id = :id"
+            "DELETE FROM companies WHERE id = :id"
         );
+
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+
         // Convertir en JSON
-        $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
+        $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
         if (empty($companiesid)) {
             $statusCode = 500;
@@ -134,78 +215,6 @@ class Companies extends BaseModel
         header('Content-Type: application/json');
         http_response_code($statusCode);
 
-        echo $jsonData;
-    }
-
-    // POST NEW COMPANY  ////////////////////////////////////////////////////////////////
-    public function createCompany($companyName, $type_id, $country, $tva, $companyCreated_at)
-    {
-        try {
-            // Insérer dans la table Companies
-            $query = $this->connection->prepare("INSERT INTO companies (name, type_id, country, tva, created_at, updated_at) VALUES (:name, :type_id, :country, :tva, :created_at, :updated_at)");
-
-            $query->bindParam(':name', $companyName);
-            $query->bindParam(':type_id', $type_id);
-            $query->bindParam(':country', $country);
-            $query->bindParam(':tva', $tva);
-            $query->bindParam(':created_at', $companyCreated_at);
-            $query->bindParam(':updated_at', $companyCreated_at);
-            return $query->execute();
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    //vérifier si la company existe déjà et récupérer son ID si c'est le cas
-    public function getCompanyIdByName($companyName)
-    {
-        $query = $this->connection->prepare("SELECT id FROM companies WHERE name = :companyName");
-        $query->bindParam(':companyName', $companyName);
-        $query->execute();
-
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-
-        //retourner l'ID de l'entreprise si une correspondance sinon retourner null
-        return $result ? $result['id'] : null;
-    }
-    // DELETE COMPANY BY ID ////////////////////////////////////////////////////////////////////////////////////////////
-    public function delete($id){
-        $query = $this->connection->prepare(
-            "DELETE FROM companies WHERE id = :id"
-        );
-    
-        $query->bindParam(':id', $id, PDO::PARAM_INT);
-        $query->execute();
-        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        // Convertir en JSON
-        $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
-
-        if (empty($companiesid)) 
-        {
-            $statusCode = 500;
-            $status = 'error';
-        } 
-        else 
-        {
-            $statusCode = 200;
-            $status = 'success';
-        }
-    
-        $response = 
-        [
-            'message' => 'List of companies by id',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
-        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
-        header('Content-Type: application/json');
-        http_response_code($statusCode);
-    
         echo $jsonData;
     }
     public function update($id)

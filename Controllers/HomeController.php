@@ -150,9 +150,9 @@ class HomeController extends Controller
         $this->invoicesModel->getFirstFiveInvoices();
     }
 
-    public function showInvoice($id)
+    public function showInvoice($invoiceId)
     {
-        $this->invoicesModel->show($id);
+        $this->invoicesModel->show($invoiceId);
     }
 
     // POST INVOICE //////////////////////////////////////////////////
@@ -240,9 +240,9 @@ class HomeController extends Controller
         $this->contactsModel->getFirstFiveContacts();
     }
 
-    public function showContact($id)
+    public function showContact($contactId)
     {
-        $this->contactsModel->show($id);
+        $this->contactsModel->show($contactId);
     }
 
     // POST CONTACT  //////////////////////////////////////////////

@@ -37,8 +37,8 @@ $router->mount('/api', function () use ($router) {
     $router->get('/fivecompanies', function () {
         (new HomeController())->fiveCompanies();
     });
-    $router->get('/companies/(\d+)', function ($id) {
-        (new HomeController())->showCompany($id);
+    $router->get('/companies/(\d+)', function ($companyId) {
+        (new HomeController())->showCompany($companyId);
     });
 
     // INVOICES /////////////////////////////////////////////////////////////////
@@ -48,8 +48,8 @@ $router->mount('/api', function () use ($router) {
     $router->get('/fiveinvoices', function () {
         (new HomeController())->fiveInvoices();
     });
-    $router->get('/invoices/(\d+)', function ($id) {
-        (new HomeController())->showInvoice($id);
+    $router->get('/invoices/(\d+)', function ($invoiceId) {
+        (new HomeController())->showInvoice($invoiceId);
     });
 
     // CONTACTS /////////////////////////////////////////////////////////////////
@@ -59,8 +59,8 @@ $router->mount('/api', function () use ($router) {
     $router->get('/fivecontacts', function () {
         (new HomeController())->fiveContacts();
     });
-    $router->get('/contacts/(\d+)', function ($id) {
-        (new HomeController())->showContact($id);
+    $router->get('/contacts/(\d+)', function ($contactId) {
+        (new HomeController())->showContact($contactId);
     });
 
     // POST METHOD  ////////////////////////////////////////////////////////////////
@@ -112,7 +112,6 @@ $router->mount('/api', function () use ($router) {
     $router->put('/update-contact/(\d+)', function ($id) {
         (new HomeController())->updateContact($id);
     });
-
 });
 
 $router->run();

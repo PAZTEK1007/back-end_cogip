@@ -3,8 +3,9 @@
 namespace App\Model;
 
 use Firebase\JWT\JWT;
+use App\Model\BaseModel;
 
-class Auth
+class Auth extends BaseModel
 {
     private $secretKey;
 
@@ -15,30 +16,26 @@ class Auth
 
     public function authenticate($email, $password)
     {
-        $token = null;
-        $error = null;
+        // Création d'une instance de la classe User
+        $userModel = new User();
 
-        try {
-            if ($this->isValidCredentials($email, $password)) {
-                $token = $this->generateToken($email);
-            } else {
-                $error = "Invalid credentials";
-            }
-        } catch (\Exception $e) {
-            $error = $e->getMessage();
+        // Appel de la méthode getUserByEmail
+        $user = $userModel->getUserByEmail($email);
+
+        // Vérification du mot de passe
+        if ($user && password_verify($password, $user['password'])) {
+            // Génération du token
+            $token = $this->generateToken($email);
+
+            return ['token' => $token];
+        } else {
+            throw new \Exception("Email ou mot de passe incorrect", 401);
         }
-
-        return ['token' => $token, 'error' => $error];
-    }
-
-    private function isValidCredentials($email, $password)
-    {
-        // Vérifiez les informations d'authentification (exemple très simple)
-        return $email === "john.doe@example.com" && $password === "test123";
     }
 
     private function generateToken($email)
     {
+        // Génération du token JWT
         $tokenPayload = [
             "iss" => "localhost",
             "aud" => "localhost",
@@ -52,12 +49,11 @@ class Auth
 
     public function verifyToken($token)
     {
+        // Vérification du token JWT
         try {
-            $decoded = JWT::decode($token, $this->secretKey, ['HS256']);
-            return $decoded;
+            return JWT::decode($token, $this->secretKey, ['HS256']);
         } catch (\Throwable $e) {
             return false;
         }
     }
-    
 }

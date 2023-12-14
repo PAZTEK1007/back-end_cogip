@@ -109,7 +109,41 @@ class User extends BaseModel
     
         echo $jsonData;
     }
+    public function getUserByEmail($email)
+    {
+        // Recherche de l'utilisateur dans la base de données
+        $query = $this->connection->prepare(
+            "SELECT * FROM users WHERE email = :email"
+        );
 
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->execute();
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($user)) {
+            $statusCode = 404;
+            $status = 'error';
+        } else {
+            $statusCode = 200;
+            $status = 'success';
+        }
+
+        $response =
+        [
+            'message' =>  'User by email',
+            'code' => $statusCode,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'data' => $user,
+        ];
+
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+
+        return $jsonData;
+    }
 
     // GET USER BY ID  ////////////////////////////////////////////////////////////////////////////////////////////
     public function show($id)

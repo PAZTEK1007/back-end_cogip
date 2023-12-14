@@ -6,55 +6,27 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Model\Auth;
 
-
+// Création d'une instance de la classe Auth en dehors des middlewares
 $auth = new Auth($_ENV["SECRET_KEY"]);
 $router = new Router();
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-    // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-    // you want to allow, and if so:
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
+// Middleware pour vérifier le token dans les requêtes GET
+$router->before('GET', '/api/(.*)', function ($route) use ($auth) {
+    $token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+});
 
 $router->mount('/api', function () use ($router, $auth) {
-    // GET METHOD  //////////////////////////////////////////////////////
+    // GET METHOD //////////////////////////////////////////////////////
     $router->get('/login', function () use ($auth) {
-        try {
-            $token = $auth->authenticate("admin", "motdepasse");
-            $decodedToken = $auth->verifyToken($token);
-
-            if ($decodedToken) {
-                echo "Token valide. Données du token : \n";
-                print_r($decodedToken);
-            } else {
-                echo "Token invalide.\n";
-            }
-        } catch (\Exception $e) {
-            echo "Erreur d'authentification : " . $e->getMessage();
-        }
-        
-        $token = $auth->authenticate("admin", "motdepasse");
-        $decodedToken = $auth->verifyToken($token);
-        
-            if ($decodedToken) {
-                echo "Token valide. Données du token : \n";
-                print_r($decodedToken);
-            } else {
-                echo "Token invalide.\n";
-            }
-       
-    });
-    
-    $router->before('GET', '/users', function () use ($auth) {
-        $token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
-    
-        if (!$auth->verifyToken($token)) {
-            echo "Accès non autorisé. Token invalide.";
-            exit;
-        }
+        $auth->authenticate("john.doe@example.com", "test123");
+        echo json_encode(['message' => 'Login endpoint'], JSON_PRETTY_PRINT);
     });
     
     // USERS /////////////////////////////////////////////////////////////////

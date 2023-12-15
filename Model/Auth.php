@@ -15,7 +15,7 @@ class Auth extends BaseModel
     {
         $this->secretKey = $secretKey;
     }
-    
+
     public function authenticate($email, $password)
     {
         // Création d'une instance de la classe User
@@ -36,13 +36,14 @@ class Auth extends BaseModel
         {
             // Génération du token
             $token = $this->generateToken($email, $password);
-
             return ['token' => $token];
         } 
         else 
         {
             throw new \Exception("Email ou mot de passe incorrect", 401);
         }
+
+
     }
 
     private function generateToken($email, $password)

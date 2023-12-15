@@ -133,17 +133,23 @@ class Companies extends BaseModel
     // Méthode pour récupérer les détails de la compagnie par son identifiant
     private function getCompanyById($companyId)
     {
-
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name,companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name AS contact_name
+            "SELECT types.name AS type_name, companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, GROUP_CONCAT(contacts.name) AS contact_names
         FROM types 
         JOIN companies ON types.id = companies.type_id
         JOIN contacts ON companies.id = contacts.company_id
-        WHERE companies.id = :id"
+        WHERE companies.id = :id
+        GROUP BY companies.id"
         );
         $query->bindParam(':id', $companyId, PDO::PARAM_INT);
         $query->execute();
-        $companyDetails = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Utiliser fetch au lieu de fetchAll, car GROUP_CONCAT génère une seule ligne
+        $companyDetails = $query->fetch(PDO::FETCH_ASSOC);
+
+        // Séparer les noms des contacts en un tableau
+        $companyDetails['contacts'] = explode(',', $companyDetails['contact_names']);
+        unset($companyDetails['contact_names']);
 
         return $companyDetails;
     }

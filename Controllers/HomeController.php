@@ -8,8 +8,8 @@ use App\Model\Companies;
 use App\Model\Invoices;
 use App\Model\Contacts;
 use App\Model\Types;
-// use App\Model\Validator;
-// use InvalidArgumentException;
+use App\Model\Validator;
+use InvalidArgumentException;
 use Exception;
 
 class HomeController extends Controller
@@ -84,9 +84,9 @@ class HomeController extends Controller
             $tva = $data['tva'];
 
             //valider et sanitiser ici
-            // Validator::validateAndSanitize($companyName, 3, 50, 'name');
-            // Validator::validateAndSanitize($country, $tva, 'tva');
-            // Validator::validateAndSanitize($companyCreated_at, 'date');
+            Validator::validateAndSanitize($typeName, 3, 50, 'name');
+            Validator::validateAndSanitize($companyName, 3, 50, 'name');
+            Validator::validateAndSanitize($tva, 'tva');
 
             // vérifier si le type_name existe dans la db
             $typeId = $this->typesModel->getTypeIdByName($typeName);
@@ -101,10 +101,6 @@ class HomeController extends Controller
                 return;
             }
 
-            // Créer l'entreprise avec le numéro de TVA
-            // Validator::validateTva($country, $tva);
-
-
             // Créer l'entreprise 
             $company = $this->companiesModel->createCompany($companyName, $typeId, $country, $tva);
             $response =
@@ -116,10 +112,10 @@ class HomeController extends Controller
 
             header('Content-Type: application/json');
             echo json_encode($response, JSON_PRETTY_PRINT);
-            // } catch (InvalidArgumentException $e) {
-            //     // Gérer l'exception d'erreur de validation
-            //     http_response_code(400);
-            //     echo json_encode(["error" => $e->getMessage()]);
+        } catch (InvalidArgumentException $e) {
+            // Gérer l'exception d'erreur de validation
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la company."], JSON_PRETTY_PRINT);
@@ -169,7 +165,8 @@ class HomeController extends Controller
             $companyName = $data['company_name'];
 
             //valider et sanitiser
-            // Validator::validateAndSanitize($date_due, 'date');
+            Validator::validateAndSanitize($date_due, 'date');
+
 
 
             // Vérifier si company_name existe déjà dans la db
@@ -205,10 +202,10 @@ class HomeController extends Controller
             header('Content-Type: application/json');
 
             echo json_encode($response, JSON_PRETTY_PRINT);
-            // } catch (InvalidArgumentException $e) {
-            //     // Gérer l'exception d'erreur de validation
-            //     http_response_code(400);
-            //     echo json_encode(["error" => $e->getMessage()]);
+        } catch (InvalidArgumentException $e) {
+            // Gérer l'exception d'erreur de validation
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la facture."], JSON_PRETTY_PRINT);
@@ -262,10 +259,10 @@ class HomeController extends Controller
             $companyName = $data['company_name'];
 
             //valider et sanitiser
-            // Validator::validateAndSanitize($contactName, 3, 50, 'name');
-            // Validator::validateAndSanitize($email, 'email');
-            // Validator::validateAndSanitize($phone, 'phone');
-            // Validator::validateAndSanitize($contactCreated_at, 'date');
+            Validator::validateAndSanitize($contactName, 3, 50, 'name');
+            Validator::validateAndSanitize($email, 'email');
+            Validator::validateAndSanitize($phone, 'phone');
+
 
             //vérifier si company_name existe déjà dans la db
             $companyId = $this->companiesModel->getCompanyIdByName($companyName);
@@ -300,10 +297,10 @@ class HomeController extends Controller
 
             header('Content-Type: application/json');
             echo json_encode($response, JSON_PRETTY_PRINT);
-            // } catch (InvalidArgumentException $e) {
-            //     // Gérer l'exception d'erreur de validation
-            //     http_response_code(400);
-            //     echo json_encode(["error" => $e->getMessage()]);
+        } catch (InvalidArgumentException $e) {
+            // Gérer l'exception d'erreur de validation
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation du contact."], JSON_PRETTY_PRINT);

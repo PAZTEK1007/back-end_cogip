@@ -143,7 +143,7 @@ class Companies extends BaseModel
         );
         $query->bindParam(':id', $companyId, PDO::PARAM_INT);
         $query->execute();
-        $companyDetails = $query->fetch(PDO::FETCH_ASSOC);
+        $companyDetails = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $companyDetails;
     }

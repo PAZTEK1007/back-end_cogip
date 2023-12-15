@@ -10,6 +10,7 @@ use App\Model\Auth;
 $auth = new Auth($_ENV["SECRET_KEY"]);
 $router = new Router();
 
+// Configuration des en-têtes CORS
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
@@ -25,10 +26,13 @@ $router->before('GET', '/api/(.*)', function ($route) use ($auth) {
 $router->mount('/api', function () use ($router, $auth) {
     // GET METHOD //////////////////////////////////////////////////////
     $router->get('/login', function () use ($auth) {
-        $auth->authenticate("john.doe@example.com", "test123");
-        echo json_encode(['message' => 'Login endpoint'], JSON_PRETTY_PRINT);
+        
+        $email = $_GET['email'] ?? 'john.doe@example.com';
+        $password = $_GET['password'] ?? 'test123';
+        
+        $auth->authenticate($email, $password);
     });
-    
+
     // USERS /////////////////////////////////////////////////////////////////
     $router->get('/users', function () {
         (new HomeController())->allUsers();
@@ -90,6 +94,11 @@ $router->mount('/api', function () use ($router, $auth) {
         (new HomeController())->createNewInvoice();
     });
 
+    // USER ////////////////////////////////////////////////
+    $router->post('/register', function () {
+        (new HomeController())->createNewUser();
+    });
+    
     // DELETE METHOD  ////////////////////////////////////////////////////////////////
 
     // USER /////////////////////////////////////////////////////////////////////

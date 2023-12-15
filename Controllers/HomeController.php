@@ -146,9 +146,57 @@ class HomeController extends Controller
         $this->invoicesModel->show($id);
     }
 
+    // POST Users //////////////////////////////////////////////////
+    public function createNewUser()
+    {
+        try
+        {
+            // Récupérer le corps de la requête JSON
+            $jsonBody = file_get_contents("php://input");
+            // Transformer le JSON en un tableau PHP associatif
+            $data = json_decode($jsonBody, true);
+
+            $LastName = $data['last_name'];
+            $firstName = $data['first_name'];
+            $email = $data['email'];
+            $password = $data['password'];
+
+            //vérifier si email existe déjà dans la db
+            $user = $this->userModel->getUserByEmail($email);
+
+            //si l'email existe déjà -> message d'erreur
+            if (empty($user)) {
+                http_response_code(400);
+                echo json_encode(["message" => "L'email existe deja."]);
+                return;
+            }
+
+            //créer l'utilisateur
+            $newUser = $this->userModel->createUser($firstName, $LastName, $email, $password);
+
+
+            $response =
+                [
+                    'data' => $newUser,
+                    'status' => 200,
+                    'message' => 'L\'utilisateur a été créée avec succès.',
+                ];
+
+            header('Content-Type: application/json');
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+
+        }
+        catch (Exception $e) 
+        {
+            http_response_code(500);
+            echo json_encode(["message" => "Une erreur s'est produite lors de la creation de l'utilisateur."], JSON_PRETTY_PRINT);
+        }
+    }
     // POST INVOICE //////////////////////////////////////////////////
     public function createNewInvoice()
     {
+    
         try {
             // Récupérer le corps de la requête JSON
             $jsonBody = file_get_contents("php://input");
@@ -197,7 +245,7 @@ class HomeController extends Controller
 
             http_response_code(500);
             echo json_encode(["message" => "Une erreur s'est produite lors de la creation de la facture."], JSON_PRETTY_PRINT);
-        }
+        };
     }
 
     // DELETE INVOICE   ////////////////////////////////////////////////////////

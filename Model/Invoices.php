@@ -12,7 +12,7 @@ class Invoices extends BaseModel
     public function getAllInvoices()
     {
         $query = $this->connection->prepare(
-            "SELECT invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
+            "SELECT invoices.id, invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
         FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN invoices ON companies.id = invoices.id_company
@@ -58,7 +58,7 @@ class Invoices extends BaseModel
     public function getFirstFiveInvoices()
     {
         $query = $this->connection->prepare(
-            "SELECT invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
+            "SELECT invoices.id, invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
         FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN invoices ON companies.id = invoices.id_company
@@ -136,7 +136,7 @@ class Invoices extends BaseModel
     private function getInvoiceById($invoiceId)
     {
         $query = $this->connection->prepare(
-            "SELECT invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
+            "SELECT invoices.id, invoices.ref, invoices.date_due, invoices.created_at AS invoice_creation, companies.name AS company_name
         FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN invoices ON companies.id = invoices.id_company

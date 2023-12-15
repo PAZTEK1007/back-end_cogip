@@ -12,7 +12,7 @@ class Contacts extends BaseModel
     public function getAllContacts()
     {
         $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id
@@ -56,7 +56,7 @@ class Contacts extends BaseModel
     public function getFirstFiveContacts()
     {
         $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id
@@ -130,7 +130,7 @@ class Contacts extends BaseModel
     private function getContactById($contactId)
     {
         $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id

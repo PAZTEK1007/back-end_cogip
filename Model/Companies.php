@@ -13,7 +13,7 @@ class Companies extends BaseModel
     public function getAllCompanies()
     {
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
+            "SELECT types.name AS type_name,companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
         FROM types 
         JOIN companies ON types.id = companies.type_id
         ORDER BY companies.name ASC"
@@ -57,7 +57,7 @@ class Companies extends BaseModel
     public function getFirstFiveCompanies()
     {
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
+            "SELECT types.name AS type_name,companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation
          FROM types 
          JOIN companies ON types.id = companies.type_id
          ORDER BY companies.created_at DESC

@@ -103,7 +103,6 @@ class Companies extends BaseModel
         // Récupérer les détails de la compagnie par ID
         $companyDetails = $this->getCompanyById($companyId);
 
-        $jsonData = json_encode($companyDetails, JSON_PRETTY_PRINT);
         // Vérifier si la compagnie a été trouvée
         if (!$companyDetails) {
             $message = 'Company not found';
@@ -136,7 +135,7 @@ class Companies extends BaseModel
     {
 
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name,companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name AS contact_name
+            "SELECT types.name AS type_name,companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, contacts.name AS contact_name
         FROM types 
         JOIN companies ON types.id = companies.type_id
         JOIN contacts ON companies.id = contacts.company_id

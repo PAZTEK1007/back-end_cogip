@@ -27,6 +27,7 @@ return array(
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
+    'DragonBe\\Vies\\' => array($vendorDir . '/dragonbe/vies/src/Vies'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
     'Auth0\\SDK\\' => array($vendorDir . '/auth0/auth0-php/src'),

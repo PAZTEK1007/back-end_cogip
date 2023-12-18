@@ -4,21 +4,33 @@ namespace App\Routes;
 
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
+use App\Model\Auth;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
+// Instanciation des dépendances
+$httpClient = new GuzzleHttpClient();
+$auth = new Auth($httpClient);
 
 $router = new Router();
 
+// Configuration des en-têtes CORS si l'origine est présente
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-    // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-    // you want to allow, and if so:
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
-$router->mount('/api', function () use ($router) {
-    // GET METHOD  //////////////////////////////////////////////////////
+// Middleware d'authentification pour toutes les routes
+$router->before('GET|POST|PUT|DELETE', '/.*', function () use ($auth) {
+    header('Content-Type: application/json');
 
+});
+
+$router->mount('/api', function () use ($router, $auth) {
+
+    $router->get('/login', function () use ($auth) {
+        $auth->login(ROUTE_URL_CALLBACK);
+    });
     // USERS /////////////////////////////////////////////////////////////////
     $router->get('/users', function () {
         (new HomeController())->allUsers();

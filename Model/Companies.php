@@ -134,7 +134,7 @@ class Companies extends BaseModel
     private function getCompanyById($companyId)
     {
         $query = $this->connection->prepare(
-            "SELECT types.name AS type_name, companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, GROUP_CONCAT(contacts.name) AS contact_names
+            "SELECT types.name AS type_name, companies.id, companies.name AS company_name, companies.country, companies.tva, companies.created_at AS company_creation, GROUP_CONCAT(contacts.name) AS contact_names, contacts.id AS contact_id
         FROM types 
         JOIN companies ON types.id = companies.type_id
         JOIN contacts ON companies.id = contacts.company_id

@@ -6,32 +6,115 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Model\Auth;
 
-// Création d'une instance de la classe Auth en dehors des middlewares
+
 $auth = new Auth($_ENV["SECRET_KEY"]);
 $router = new Router();
 
-// Configuration des en-têtes CORS
-if (isset($_SERVER['HTTP_ORIGIN'])) {
+if (isset($_SERVER['HTTP_ORIGIN'])) 
+{
+    // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
+    // you want to allow, and if so:
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400'); // cache for 1 day
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH");
+    header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, X-Auth-Token, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 
-// Middleware pour vérifier le token dans les requêtes GET
-$router->before('GET', '/api/(.*)', function ($route) use ($auth) {
-    $token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+// MIDDLEWARE  /////////////////////////////////////////////////////////////
+$router->before('POST', '/api/(.*)', function ($route) use ($auth) 
+{   
+    // Récupère le token
+    $authorizationHeader = apache_request_headers()['Authorization'] ?? '';
+    $token = str_replace('Bearer ', '', $authorizationHeader);
 
+    // Vérifie le token
+    $auth->verifyToken($token);
+
+    if($auth->verifyToken($token) === true)
+    {
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès autorisé']);
+        return;
+    }
+    else{
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès non autorisé']);
+        return;
+    }
+});
+$router->before('DEL', '/api/(.*)', function ($route) use ($auth) 
+{   
+    // Récupère le token
+    $authorizationHeader = apache_request_headers()['Authorization'] ?? '';
+    $token = str_replace('Bearer ', '', $authorizationHeader);
+
+    // Vérifie le token
+    $auth->verifyToken($token);
+
+    if($auth->verifyToken($token) === true)
+    {
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès autorisé']);
+        return;
+    }
+    else{
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès non autorisé']);
+        return;
+    }
 });
 
-$router->mount('/api', function () use ($router, $auth) {
-    // GET METHOD //////////////////////////////////////////////////////
-    $router->get('/login', function () use ($auth) {
+$router->before('PUT', '/api/(.*)', function ($route) use ($auth) 
+{   
+    // Récupère le token
+    $authorizationHeader = apache_request_headers()['Authorization'] ?? '';
+    $token = str_replace('Bearer ', '', $authorizationHeader);
+
+    // Vérifie le token
+    $auth->verifyToken($token);
+
+    if($auth->verifyToken($token) === true)
+    {
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès autorisé']);
+        return;
+    }
+    else{
+        http_response_code(401);
+        echo json_encode(['message' => 'Accès non autorisé']);
+        return;
+    }
+});
+// ROUTES /////////////////////////////////////////////////////////////////////
+
+$router->mount('/api', function () use ($router, $auth) 
+{
+    // LOGIN /////////////////////////////////////////////////////////////////
+    $router->post('/login', function () use ($auth) 
+    {
+        // Récupération du body de la requête
+        $jsonBody = file_get_contents("php://input");
+        $data = json_decode($jsonBody, true);
         
-        $email = $_GET['email'] ?? 'john.doe@example.com';
-        $password = $_GET['password'] ?? 'test123';
-        
+        // Récupération des données
+        $email = $data['email'];
+        $password = $data['password'];
+
+        // Vérification des données
+        if (empty($email) || empty($password)) 
+        {
+            http_response_code(400);
+            echo json_encode(['message' => 'Email et mot de passe requis']);
+            return;
+        }
+
+        // Appel de la méthode authenticate
         $auth->authenticate($email, $password);
+
     });
+
+    // GET METHOD  //////////////////////////////////////////////////////
 
     // USERS /////////////////////////////////////////////////////////////////
     $router->get('/users', function () {
@@ -94,11 +177,10 @@ $router->mount('/api', function () use ($router, $auth) {
         (new HomeController())->createNewInvoice();
     });
 
-    // USER ////////////////////////////////////////////////
+    // USER ////////////////////////////////////////////
     $router->post('/register', function () {
         (new HomeController())->createNewUser();
-    });
-    
+     });
     // DELETE METHOD  ////////////////////////////////////////////////////////////////
 
     // USER /////////////////////////////////////////////////////////////////////

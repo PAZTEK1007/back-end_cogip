@@ -4,9 +4,9 @@ namespace App\Model;
 
 use App\Model\BaseModel;
 use App\Model\Error;
+
+use Exception;
 use PDO;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class User extends BaseModel
 {
@@ -32,31 +32,28 @@ class User extends BaseModel
 
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
-        if (empty($usersData)) 
-        {
+        if (empty($usersData)) {
             $statusCode = 500;
             $status = 'error';
-        }
-        else
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of all users',
-            'code' => $statusCode,
-            'content-type' => 'application/json',
-            'status' => $status,
-            'data' => $usersData,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of all users',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $usersData,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
         echo $jsonData;
     }
 
@@ -82,45 +79,8 @@ class User extends BaseModel
         // JSON_PRETTY_PRINT -> meilleure lisibilité lors de l'affichage.
         $jsonData = json_encode($usersData, JSON_PRETTY_PRINT);
 
-        if (empty($usersData))
-        {
+        if (empty($usersData)) {
             $statusCode = 500;
-            $status = 'error';
-        }
-        else
-        {
-            $statusCode = 200;
-            $status = 'success';
-        }
-    
-        $response = 
-        [
-            'message' => 'List of 5 users',
-            'code' => $statusCode,
-            'content-type' => 'application/json',
-            'status' => $status,
-            'data' => $usersData,
-        ];
-    
-        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
-        header('Content-Type: application/json');
-        http_response_code($statusCode);
-    
-        echo $jsonData;
-    }
-    public function getUserByEmail($email)
-    {
-        // Recherche de l'utilisateur dans la base de données
-        $query = $this->connection->prepare(
-            "SELECT email, password FROM users WHERE email = :email"        );
-
-        $query->bindParam(':email', $email, PDO::PARAM_STR);
-        $query->execute();
-        $user = $query->fetch(PDO::FETCH_ASSOC);
-
-        if (empty($user)) {
-            $statusCode = 404;
             $status = 'error';
         } else {
             $statusCode = 200;
@@ -128,21 +88,22 @@ class User extends BaseModel
         }
 
         $response =
-        [
-            'message' =>  'User by email',
-            'code' => $statusCode,
-            'content-type' => 'application/json',
-            'status' => $status,
-            'data' => $user,
-        ];
+            [
+                'message' => 'List of 5 users',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $usersData,
+            ];
 
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
 
         header('Content-Type: application/json');
         http_response_code($statusCode);
 
-        return $jsonData;
+        echo $jsonData;
     }
+
 
     // GET USER BY ID  ////////////////////////////////////////////////////////////////////////////////////////////
     public function show($id)
@@ -162,31 +123,68 @@ class User extends BaseModel
         // Convertir en JSON
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        if (empty($companiesid)) 
-        {
+        if (empty($companiesid)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'users',
-            'code' => $statusCode,
-            'content-type' => 'application/json',
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'users',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
+
+        echo $jsonData;
+    }
+
+    // DELETE USER BY ID ////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function delete($id)
+    {
+        $query = $this->connection->prepare(
+            "DELETE FROM users WHERE id = :id"
+        );
+
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Convertir en JSON
+        $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
+
+        if (empty($companiesid)) {
+            $statusCode = 500;
+            $status = 'error';
+        } else {
+            $statusCode = 200;
+            $status = 'success';
+        }
+
+        $response =
+            [
+                'message' => 'users',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+
         echo $jsonData;
     }
     // CREATE USER  ////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,47 +207,81 @@ class User extends BaseModel
             throw $e;
         }
     }
-
-    // DELETE USER BY ID ////////////////////////////////////////////////////////////////////////////////////////////
-
-    public function delete($id){
+    public function getUserByEmail($email)
+    {
+        // Recherche de l'utilisateur dans la base de données
         $query = $this->connection->prepare(
-            "DELETE FROM users WHERE id = :id"
+            "SELECT email, password, role_id FROM users WHERE email = :email"
+        );
+
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->execute();
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($user)) {
+            $statusCode = 404;
+            $status = 'error';
+        } else {
+            $statusCode = 200;
+            $status = 'success';
+        }
+
+        $response =
+            [
+                'message' =>  'User by email',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $user,
+            ];
+
+        $jsonData = json_encode($response, JSON_PRETTY_PRINT);
+
+        header('Content-Type: application/json');
+        http_response_code($statusCode);
+
+        return $jsonData;
+    }
+    public function update($id)
+    {
+        $query = $this->connection->prepare(
+            "UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email, password = :password WHERE id = :id"
         );
     
         $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+        $query->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->bindParam(':password', $password, PDO::PARAM_STR);
+    
         $query->execute();
         $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
 
         // Convertir en JSON
         $jsonData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        if (empty($companiesid)) 
-        {
+        if (empty($companiesid)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'users',
-            'code' => $statusCode,
-            'content-type' => 'application/json',
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'users',
+                'code' => $statusCode,
+                'content-type' => 'application/json',
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
-        echo $jsonData;
 
+        echo $jsonData;
     }
 }

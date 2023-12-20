@@ -12,10 +12,11 @@ class Contacts extends BaseModel
     public function getAllContacts()
     {
         $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
          FROM types 
          JOIN companies ON types.id = companies.type_id
-         JOIN contacts ON companies.id = contacts.company_id"
+         JOIN contacts ON companies.id = contacts.company_id
+         ORDER BY contacts.name ASC"
         );
         $query->execute();
         $companiesData = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -55,7 +56,7 @@ class Contacts extends BaseModel
     public function getFirstFiveContacts()
     {
         $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
          FROM types 
          JOIN companies ON types.id = companies.type_id
          JOIN contacts ON companies.id = contacts.company_id
@@ -94,37 +95,29 @@ class Contacts extends BaseModel
     }
 
 
-    public function show($id)
+    public function show($contactId)
     {
-        $query = $this->connection->prepare(
-            "SELECT contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
-         FROM types 
-         JOIN companies ON types.id = companies.type_id
-         JOIN contacts ON companies.id = contacts.company_id
-         WHERE contacts.id = :id"
-        );
-        $query->bindParam(':id', $id, PDO::PARAM_INT);
-        $query->execute();
-        $companiesid = $query->fetchAll(PDO::FETCH_ASSOC);
+        $contactDetails = $this->getContactById($contactId);
 
-        $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
-
-        if (empty($companiesid)) {
-            $statusCode = 500;
+        $jsonData = json_encode($contactDetails, JSON_PRETTY_PRINT);
+        // Vérifier si la compagnie a été trouvée
+        if (!$contactDetails) {
+            $message = 'Contact not found';
+            $statusCode = 404;
             $status = 'error';
         } else {
+            $message = 'Contact details';
             $statusCode = 200;
             $status = 'success';
         }
-
-        $response =
-            [
-                'message' => 'List of contact by id',
-                'content-type' => 'application/json',
-                'code' => $statusCode,
-                'status' => $status,
-                'data' => $companiesid,
-            ];
+        // Retourner une réponse JSON avec un statut d'erreur
+        $response = [
+            'message' => $message,
+            'content-type' => 'application/json',
+            'status' => $status,
+            'code' => $statusCode,
+            'data' => $contactDetails,
+        ];
 
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
 
@@ -134,21 +127,35 @@ class Contacts extends BaseModel
         echo $jsonData;
     }
 
+    private function getContactById($contactId)
+    {
+        $query = $this->connection->prepare(
+            "SELECT contacts.id, contacts.name, contacts.email, contacts.phone, contacts.created_at AS contact_creation, companies.name AS company_name
+         FROM types 
+         JOIN companies ON types.id = companies.type_id
+         JOIN contacts ON companies.id = contacts.company_id
+         WHERE contacts.id = :id"
+        );
+        $query->bindParam(':id', $contactId, PDO::PARAM_INT);
+        $query->execute();
+        $contactDetails = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $contactDetails;
+    }
+
 
     // POST METHOD  //////////////////////////////////////////////////////////////////////////////////////////////
-    public function createContact($contactName, $company_id, $email, $phone, $contactCreated_at)
+    public function createContact($contactName, $company_id, $email, $phone)
     {
         try {
             $query = $this->connection->prepare(
-                "INSERT INTO contacts (name, company_id, email, phone, created_at, updated_at) VALUES (:name, :company_id, :email, :phone, :created_at, :updated_at)"
+                "INSERT INTO contacts (name, company_id, email, phone) VALUES (:name, :company_id, :email, :phone)"
             );
 
             $query->bindParam(':name', $contactName);
             $query->bindParam(':company_id', $company_id);
             $query->bindParam(':email', $email);
             $query->bindParam(':phone', $phone);
-            $query->bindParam(':created_at', $contactCreated_at);
-            $query->bindParam(':updated_at', $contactCreated_at);
             return $query->execute();
         } catch (Exception $e) {
             throw $e;
@@ -181,33 +188,29 @@ class Contacts extends BaseModel
 
         $companiesData = json_encode($companiesid, JSON_PRETTY_PRINT);
 
-        if (empty($companiesid)) 
-        {
+        if (empty($companiesid)) {
             $statusCode = 500;
             $status = 'error';
-        } 
-        else 
-        {
+        } else {
             $statusCode = 200;
             $status = 'success';
         }
-    
-        $response = 
-        [
-            'message' => 'List of contacts by id',
-            'content-type' => 'application/json',
-            'code' => $statusCode,
-            'status' => $status,
-            'data' => $companiesid,
-        ];
-    
+
+        $response =
+            [
+                'message' => 'List of contacts by id',
+                'content-type' => 'application/json',
+                'code' => $statusCode,
+                'status' => $status,
+                'data' => $companiesid,
+            ];
+
         $jsonData = json_encode($response, JSON_PRETTY_PRINT);
-    
+
         header('Content-Type: application/json');
         http_response_code($statusCode);
-    
-        echo $jsonData;
 
+        echo $jsonData;
     }
     public function update($id)
     {
@@ -225,8 +228,8 @@ class Contacts extends BaseModel
                 return json_encode(['message' => 'Contact already exists']);
             }
 
-             // Mettre à jour le type
-             $query = $this->connection->prepare(
+            // Mettre à jour le type
+            $query = $this->connection->prepare(
                 "UPDATE contacts SET name = :name , company_id = :company_id, email = :email, phone = :phone, created_at = :created_at, updated_at = :updated_at WHERE id = :id"
             );
 
